@@ -23,6 +23,7 @@
     "passport":"*",
     "passport-local":"*",
     "passport-local-mongoose":"*",
-    "should":"*"
+    "should":"*",
+    "express-validator":"*"
   }
 }

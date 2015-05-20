@@ -1,12 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Ticket = new Schema({
-	student: String,
+var TicketSchema = new Schema({
+	student: {type: Number, ref: 'Account' },
 	title: String,
 	message: String,
 	location: String,
-	datetime: Date
+	date: {type: Date, default: Date.now },
+	seen: {type: Boolean, default: false}
 });
 
-module.exports = mongoose.model('Ticket', Ticket);
+var Ticket = mongoose.model('Ticket', TicketSchema)
+module.exports = Ticket

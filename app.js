@@ -1,5 +1,6 @@
 // dependencies
 var express = require('express');
+var expressValidator = require('express-validator');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -11,6 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var tickets = require('./routes/tickets');
 
 var app = express();
 
@@ -23,6 +25,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(require('express-session')({
     secret: 'keyboard cat',
@@ -35,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', routes);
+app.use('/tickets', tickets)
 
 // passport config
 var Account = require('./models/account');
