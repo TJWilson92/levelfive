@@ -2,14 +2,37 @@ extends layout
 
 block content
   .container
-    h1 Register Page
-    p.lead Say something worthwhile here.
+    h1 Register
+    p.lead Register with the details below
+    ul.errors
+    if errors
+      each error, i in errors
+        li.alert.alert-danger #{error.msg}
     br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
+    form(role='form', action="/register",method="post", style='max-width: 400px;')
       .form-group
-          input.form-control(type='text', name="username", placeholder='Enter Username')
+        label Name
+        input.form-control(type='text', name='firstname', placeholder='First Name')
+      .form-group
+        input.form-control(type='text', name='surname', placeholder='Last Name')
+      .form-group
+        label Year of Study
+        select.form-control(type='submit', name='yearofstudy')
+          option 1
+          option 2
+          option 3
+          option 4
+      .form-group
+        label Details
+        .input-group
+          input.form-control(type='text', name='username', placeholder='Uni. Username')
+          span.input-group-addon @soton.ac.uk
+
+        
       .form-group
         input.form-control(type='password', name="password", placeholder='Password')
+      .form-group
+        input.form-control(type='password', name='password2', placeholder='Confirm Password')
       button.btn.btn-default(type='submit') Submit
       &nbsp;
       a(href='/')
