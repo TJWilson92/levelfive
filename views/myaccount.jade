@@ -1,0 +1,54 @@
+extends layout
+
+block content
+	.container
+		.jumbotron
+			h1 Your Account
+		if (errors)
+			ul
+				each er in errors
+					li.alert.alert-danger #{er.msg}
+		.panel.panel-primary
+			.panel-heading 
+				h2 Your Details
+			.panel-body 
+				.container(align='center')
+					if (user.isStudent)
+						h3 Account Type: Student 
+					if (user.isDemonstrator)
+						h3 Account Type: isDemonstrator
+					if (user.isAdmin)
+						h3 Account Type: Admin
+				hr					
+				.row
+					form(role='form', action='/myaccount',method="post")
+						.col-md-6(style = 'margin-left: 0px;')
+							.form-group
+								label Username
+								input.form-control(type='text', value = user.username, name='username')
+							.form-group
+								label First Name
+								input.form-control(type='text', value = user.firstname, name='firstname')
+								label Surname
+								input.form-control(type='text', value = user.surname, name='surname')
+							.form-group
+								label Year of Study
+								select.form-control(type='submit', name='yearofstudy', value = user.yearofstudy)
+									option 1
+									option 2
+									option 3
+									option 4
+							.form-group
+								label Change Password
+								input.form-control(type='password', name='password1')
+								label Confirm New Password
+								input.form-control(type='password', name='password2')
+						.col-md-6
+							.lead Editing your account
+							p After you have edited anything you want on the right, enter your password below and hit submit.
+							.form-group
+								input.form-control(type='password', name='password', style='width:80%;')
+							button.btn.btn-primary(type='submit') Change
+
+
+					

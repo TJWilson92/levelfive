@@ -1,10 +1,17 @@
 extends layout
 
 block content
-  if (!user)
-    a(href="/login") login
-    br
-    a(href="/register") Register 
-  if (user)
-    p You are currently logged in as #{user.username}
-    a(href="logout") Logout
+    .container
+      if (!user)
+       .jumbotron
+        h1 Please login please
+      if (user)
+        .jumbotron
+            h1 Welcome, #{user.firstname}
+
+        .panel.panel-primary
+            .panel-heading
+                h2 Your tickets
+            .panel-body
+                p Some stuff
+        

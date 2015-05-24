@@ -1,12 +1,18 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
+var plm = require('passport-local-mongoose');
 var router = express.Router();
 
+
 router.get('/', function (req, res) {
-    res.render('index', { 
-        user : req.user,
-        title : "Levelfour" });
+    if (!req.user) {
+        res.redirect('login');
+    } else {
+        res.render('index', { 
+            user : req.user,
+            title : "Levelfour" });
+    }
 });
 
 router.get('/register', function(req, res) {
@@ -74,5 +80,76 @@ router.get('/logout', function(req, res) {
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
+
+router.get('/myaccount', function(req, res, next){
+    if (!req.user) {
+        res.redirect('login');
+    } else {
+        res.render('myaccount', {user : req.user});
+    }
+});
+
+router.post('/myaccount', function(req, res, next){
+    var user = req.user;
+    // Validate the form 
+    req.checkBody('username', 'Must have username').notEmpty();
+    req.checkBody('firstname', 'Need name').notEmpty();
+    req.checkBody('surname', 'Need surname').notEmpty();
+    req.checkBody('password', 'You must enter your password to change anything').notEmpty();
+
+    var errors = req.validationErrors();
+    
+    if (errors) {
+        res.render('myaccount', {
+            errors: errors,
+            user: req.user,
+            username: req.body.username,
+            firstname: req.body.firstname,
+            surname: req.body.surname,
+            yearofstudy: req.body.yearofstudy
+        });
+    } else { 
+        req.user.authenticate(req.body.password, function(err, thisModel, passwordErr){
+            if (err) throw err;
+            if (passwordErr) {
+                res.render('myaccount',{
+                    errors: [passwordErr],
+                    user: req.user,
+                    username: req.body.username,
+                    firstname: req.body.firstname,
+                    surname: req.body.surname,
+                    yearofstudy: req.body.yearofstudy
+                });
+            } else {
+                Account.update({
+                    username:user.username}, 
+                    {
+                        username: req.body.username,
+                        email: req.body.username + "@soton.ac.uk",
+                        firstname: req.body.firstname,
+                        surname: req.body.surname,
+                        yearofstudy: req.body.yearofstudy
+                    }, 
+                    {multi : false }, 
+                    function(err){
+                        if (err) throw err;
+                    });
+                if (req.body.password1.length > 0) {
+                    console.log('Setting password');
+                    req.user.setPassword(req.body.password1, function(err){
+                        if (err) throw err;
+                        req.user.save();
+                    });
+                }
+            }
+        });
+    }
+
+    res.redirect('/', 200, {
+        user: Account.find({username:req.user.username})
+    });
+});
+
+
 
 module.exports = router;
