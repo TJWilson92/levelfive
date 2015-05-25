@@ -69,7 +69,15 @@ router.get('/login', function(req, res) {
 router.post('/login', 
     passport.authenticate('local'), 
     function(req, res) {
-        res.redirect('/');
+        console.log(Date.now() - req.user.lastLoggedIn);
+        req.user.lastLoggedIn = Date.now();
+        req.user.save(function(err){
+            if (err) throw (err);
+            res.redirect('/', 200, {
+                // 8 hours in milliseconds = 28800000
+                needsNewLocation: ((Date.now() - req.user.lastLoggedIn) >= 1000)
+            });
+        });
 });
 
 router.get('/logout', function(req, res) {

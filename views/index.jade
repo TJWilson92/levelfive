@@ -1,17 +1,29 @@
 extends layout
 
 block content
-    .container
-      if (!user)
-       .jumbotron
-        h1 Please login please
-      if (user)
-        .jumbotron
-            h1 Welcome, #{user.firstname}
+  script(type='text/javascript').
+    var local_data =!{JSON.stringify(user)}
+    console.log(local_data);
+  script(src='javascripts/index.js')
+  .container
+    if (!user)
+     .jumbotron
+      h1 Please login please
+    if (user)
+      .jumbotron
+          h1 Welcome, #{user.firstname}
+      .panel.panel-warning
+        .panel-heading
+          h2 Need your location!
+        .panel-body
+          p Please enter where you are so we can send a ticket to you
+          input#locationBar.form-control(style='max-width: 400px;') 
+          button#locationButton.btn.btn-primary Send
+          div#locationTestBox
 
-        .panel.panel-primary
-            .panel-heading
-                h2 Your tickets
-            .panel-body
-                p Some stuff
-        
+      .panel.panel-primary
+          .panel-heading
+              h2 Your tickets
+          .panel-body
+              p Some stuff
+  

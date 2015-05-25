@@ -6,6 +6,7 @@ var Account = new Schema({
 	username: String,
 	password: String,
 	email: String,
+	location: String,
 	studyyear: Number,
 	firstname: String,
 	surname: String,
@@ -13,6 +14,7 @@ var Account = new Schema({
 	isDemonstrator: {type: Boolean, default: false},
 	isAdmin: {type: Boolean, default: false},
 	lastUpdated: Date,
+	lastLoggedIn: Date
 });
 
 Account.plugin(passportLocalMongoose);
