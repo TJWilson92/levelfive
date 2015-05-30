@@ -158,6 +158,15 @@ router.post('/myaccount', function(req, res, next){
     });
 });
 
+router.post('/updateLocation', function(req, res, next){
+    var newLocation = req.body.newLocation;
+    var uId = req.body['account[_id]'];
+    Account.findOne({_id : uId}, function(err, acc){
+        acc.location = newLocation;
+        acc.save();
+        res.send('success');
+    });
+})
 
 
 module.exports = router;

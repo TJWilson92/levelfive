@@ -1,16 +1,20 @@
 $(document).ready(function(){
-	console.log(local_data)
+	
+	console.log(local_data);
 	user = local_data
 
 	$('#locationButton').click(function(){
-		if($('#locationBar').val().length > 1) {
-			user.location = $('#locationBar').val();
-			user.save(function(err){
-				if (err) console.log(err);
-				alert('Your new location is ' + $('#locationBar').val());
+		var val = document.getElementById('locationBar').value
+		if (val.length > 0) {
+			$.ajax({
+				url: 'updateLocation',
+				method: 'POST',
+				data: {account: user, newLocation: val},
+			}).done(function(){
+				$('#locationBox').hide( 'drop', {direction: 'down'}, 'slow')
 			});
 		} else {
-			alert('Please enter a location');
+			alert('Please enter a location!')
 		}
 	});
 });

@@ -3,7 +3,6 @@ extends layout
 block content
   script(type='text/javascript').
     var local_data =!{JSON.stringify(user)}
-    console.log(local_data);
   script(src='javascripts/index.js')
   .container
     if (!user)
@@ -12,14 +11,15 @@ block content
     if (user)
       .jumbotron
           h1 Welcome, #{user.firstname}
-      .panel.panel-warning
+      .div(nt)
+      .panel.panel-warning#locationBox
         .panel-heading
           h2 Need your location!
         .panel-body
           p Please enter where you are so we can send a ticket to you
-          input#locationBar.form-control(style='max-width: 400px;') 
+          input#locationBar
           button#locationButton.btn.btn-primary Send
-          div#locationTestBox
+          <div>{{location}} </div>
 
       .panel.panel-primary
           .panel-heading
