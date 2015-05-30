@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
+var Ticket = require('../models/ticket')
 var plm = require('passport-local-mongoose');
 var router = express.Router();
 
@@ -165,6 +166,26 @@ router.post('/updateLocation', function(req, res, next){
         acc.location = newLocation;
         acc.save();
         res.send('success');
+    });
+});
+
+router.post('/createTicket', function(req, res, next){
+    var tktQuestion = req.body.tktQuestion;
+    var tktText = req.body.tktText;
+
+    var newTicket = new Ticket({
+        student: req.user._id,
+        currentQuestion: tktQuestion,
+        message: tktText,
+        location: req.user.location
+    });
+    newTicket.save();
+    res.send('success')
+});
+
+router.get('/getTickets', function(req, res, next){
+    Ticket.find({student: req.user.id}, function(err, tckts){
+        res.send(tckts);
     });
 })
 

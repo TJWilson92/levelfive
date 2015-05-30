@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TicketSchema = new Schema({
-	student: {type: Number, ref: 'Account' },
-	title: String,
+	student: mongoose.Schema.ObjectId,
+	currentQuestion: String,
 	message: String,
 	location: String,
 	date: {type: Date, default: Date.now },

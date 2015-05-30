@@ -7,19 +7,39 @@ block content
   .container
     if (!user)
      .jumbotron
-      h1 Please login please
+        h1 Please login please
+
     if (user)
       .jumbotron
           h1 Welcome, #{user.firstname}
-      .div(nt)
-      .panel.panel-warning#locationBox
+          button.btn.btn-primary#getTicketsBtn Get Tickets
+
+      if ((Date.now() - user.lastLoggedIn) > 28800000)
+        .panel.panel-warning#locationBox
+          .panel-heading
+            h2 Need your location!
+          .panel-body
+            p Please enter where you are so we can send a ticket to you
+            input#locationBar
+            button#locationButton.btn.btn-primary Send   
+
+      .panel.panel-default
         .panel-heading
-          h2 Need your location!
+          h2 Your Tickets     
         .panel-body
-          p Please enter where you are so we can send a ticket to you
-          input#locationBar
-          button#locationButton.btn.btn-primary Send
-          <div>{{location}} </div>
+          div#ticketResultsHere
+
+      .panel.panel-success
+        .panel-heading
+          h2 New Ticket 
+        .panel-body
+          form#tktForm
+            .form-group
+              input.form-control#tktQuestion(type='text', placeholder='What problem/question are you on?' minlength='1' required)
+            .form-group
+              textarea.form-control#tktText(type='text', placeholder='What do you need help with?' required)
+            .form-group(align='right')
+              button.btn.btn-primary#tktSubmit Submit
 
       .panel.panel-primary
           .panel-heading
