@@ -14,7 +14,7 @@ block content
           h1 Welcome, #{user.firstname}
           button.btn.btn-primary#getTicketsBtn Get Tickets
 
-      if ((Date.now() - user.lastLoggedIn) > 28800000)
+      if ((Date.now() - user.lastLoggedIn) > 600000000)
         .panel.panel-warning#locationBox
           .panel-heading
             h2 Need your location!
@@ -27,7 +27,14 @@ block content
         .panel-heading
           h2 Your Tickets     
         .panel-body
-          div#ticketResultsHere
+          table.table
+            thead
+              tr
+                th Question
+                th Message
+                th Seen?
+            tbody#ticketTable
+              
 
       .panel.panel-success
         .panel-heading

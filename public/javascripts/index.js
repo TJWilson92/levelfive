@@ -1,36 +1,36 @@
 $(document).ready(function(){
 	user = local_data
 
-	var getTickets = function(){
+	var getTickets = function(callback){
 		$.ajax({
 			url: '/getTickets',
 			method: 'GET',
 		}).done(function(results){
-			$('#ticketResultsHere').append(JSON.stringify(results));
+			callback(results);
 		});
 	};
 
-	var drawStudentTickets = function(tickets, divName) {
-		var results = [];
-		tickets.forEach(function(val, ind, array){
+	var addTicketToPanel = function(tickets){
+		totalHtml = [];
+		tickets.forEach(function(curr, ind, arr){
 			indTicket = [];
-			indTicket.push("<div class='panel panel-default> <div class='panel-heading'> <h2> Ticket </h2> </div> <div class='panel-body'>")
-			indTicket.push("<b>Question: </b>" + val.currentQuestion.toString() + "<br/>");
-			indTicket.push("<b>Message: </b>" + val.message.toString() + "<br/>");
-
-			if (val.seen == true) {
-				indTicket.push("<b>Status: </b> Seen")
-			} else {
-				indTicket.push("<b>Status: </b> Unseen")
+			indTicket.push('<tr><td>');
+			indTicket.push(curr.currentQuestion);
+			indTicket.push('</td><td>');
+			indTicket.push(curr.message);
+			indTicket.push('</td><td>');
+			var seen = curr.seen;
+			if (seen){
+				indTicket.push('Seen');
+			}else {
+				indTicket.push('Not Seen');
 			}
-			results.push(indTicket);
+			indTicket.push('</td></tr>');
+			totalHtml.push(indTicket.join(''));
 		});
-		return results;
-	};
-
-
+		$('#ticketTable').replaceWith(totalHtml.join(''));
+	}
 	
-
 	$('#locationButton').click(function(){
 		var val = document.getElementById('locationBar').value
 		if (val.length > 0) {
@@ -67,8 +67,12 @@ $(document).ready(function(){
 	
 
 	$('#getTicketsBtn').click(function(){
-		getTickets();
-		// alert('hi');
+
+		getTickets(function(results){
+			addTicketToPanel(results);
+		});
+		
+		
 	});
 
 });
