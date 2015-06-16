@@ -1,6 +1,8 @@
 $(document).ready(function(){
+	// This is set in index.jade file, as comes through right away.
 	user = local_data
-
+	
+	// Sort out the updating of tickets
 	var getTickets = function(callback){
 		$.ajax({
 			url: '/getTickets',
@@ -25,12 +27,25 @@ $(document).ready(function(){
 			}else {
 				indTicket.push('Not Seen');
 			}
+			indTicket.push('</td><td>');
+			indTicket.push('<form method="post" action="tickets/studentCloseTicket"><button type="submit" name="ticketId" value="' + curr._id + '">Close</button></form>');
 			indTicket.push('</td></tr>');
 			totalHtml.push(indTicket.join(''));
 		});
 		$('#ticketTable').replaceWith(totalHtml.join(''));
 	}
+
+	var ticketFunction = function(){
+		getTickets(function(results){
+			addTicketToPanel(results)
+		});
+	};
+
+	// Update the ticket table every 60 seconds.
+	setTimeout(ticketFunction(),60000);
 	
+	
+	// Updates student's location via ajax, then hides the container.
 	$('#locationButton').click(function(){
 		var val = document.getElementById('locationBar').value
 		if (val.length > 0) {
@@ -47,32 +62,23 @@ $(document).ready(function(){
 	});
 
 	$('#tktSubmit').click(function(){
-		// Check that that the student has entered something.
-
 		if (($('#tktQuestion').val().length > 0) & ($('#tktText').val().length > 0)){
 			var tktQuestion = $('#tktQuestion').val();
 			var tktText = $('#tktText').val();
+
 			$.ajax({
 				url: 'createTicket',
 				method: 'POST',
 				data: {tktQuestion: tktQuestion, tktText: tktText},
-			}).done({
-
-			})
+			}).done(function(){
+				// Clear the box
+				$('#tktQuestion').val = ""
+				$('#tktText').val = ""
+				
+			});
 		} else {
 			alert('Oop, we need your current quesiton, and a message for help!');
 		}
-	});
-
-	
-
-	$('#getTicketsBtn').click(function(){
-
-		getTickets(function(results){
-			addTicketToPanel(results);
-		});
-		
-		
 	});
 
 });

@@ -180,14 +180,17 @@ router.post('/createTicket', function(req, res, next){
         location: req.user.location
     });
     newTicket.save();
-    res.send('success')
+    res.end('Success');
 });
 
 router.get('/getTickets', function(req, res, next){
-    Ticket.find({student: req.user.id}, function(err, tckts){
+    Ticket.find( {
+        $and : [
+         { student: req.user.id },
+         { ticketStatus: {'$ne' : "Closed (by student)"} }
+         ] }, function(err, tckts){
         res.send(tckts);
     });
-})
-
+});
 
 module.exports = router;

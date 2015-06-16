@@ -41,10 +41,20 @@ router.post('/new', function(req, res){
 		if (err) return handleError(err);
 		res.redirect('/');	
 	});	
-	};
+	};	
+});
+
+router.post('/studentCloseTicket', function(req, res, next){
+	console.log("Reached studentCloseTicket");
+	console.log(req.body.ticketId);
 	
 
-	
-	
+	Ticket.findOne({'_id' : req.body.ticketId}, function(err, ticket){
+		console.log(ticket);
+		ticket.ticketStatus = "Closed (by student)";
+		ticket.save();
+		console.log(ticket);
+		res.redirect(301, '/');
+	});
 })
 module.exports = router;

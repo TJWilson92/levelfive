@@ -3,7 +3,6 @@ extends layout
 block content
   script(type='text/javascript').
     var local_data =!{JSON.stringify(user)}
-  script(src='javascripts/index.js')
   .container
     if (!user)
      .jumbotron
@@ -12,9 +11,9 @@ block content
     if (user)
       .jumbotron
           h1 Welcome, #{user.firstname}
-          button.btn.btn-primary#getTicketsBtn Get Tickets
+          button.btn-primary#tktbtn Button
 
-      if ((Date.now() - user.lastLoggedIn) > 600000000)
+      if ((Date.now() - user.lastLoggedIn) > 60000000)
         .panel.panel-warning#locationBox
           .panel-heading
             h2 Need your location!
@@ -33,6 +32,7 @@ block content
                 th Question
                 th Message
                 th Seen?
+                th Close Ticket
             tbody#ticketTable
               
 

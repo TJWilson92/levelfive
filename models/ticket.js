@@ -7,7 +7,8 @@ var TicketSchema = new Schema({
 	message: String,
 	location: String,
 	date: {type: Date, default: Date.now },
-	seen: {type: Boolean, default: false}
+	seen: {type: Boolean, default: false},
+	ticketStatus: {type: String, default: 'Submitted'}
 });
 
 var Ticket = mongoose.model('Ticket', TicketSchema)
