@@ -188,9 +188,35 @@ router.get('/getTickets', function(req, res, next){
         $and : [
          { student: req.user.id },
          { ticketStatus: {'$ne' : "Closed (by student)"} }
-         ] }, function(err, tckts){
+         ] 
+     }, function(err, tckts){
         res.send(tckts);
     });
+});
+
+router.get('/getTicketsUnseen', function(req, res, next){
+    results = []
+    Ticket.find( {
+        $and : [
+            { open : true},
+            { seen : false}
+        ]
+    }, function(err, tickets){
+        tickets.forEach(function(curr, ind, arr){
+            Account.findOne({_id : curr.student}, function(err, account){
+                ticketResult = [];
+                ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
+                ticketResult.push(curr.currentQuestion);
+                ticketResult.push(curr.message);
+                ticketResult.push(curr.date);
+                results.push(ticketResult);
+                
+                if (ind == (arr.length - 1)) {
+                    res.send(results);
+                };
+            });
+        })
+    })
 });
 
 module.exports = router;

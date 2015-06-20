@@ -8,6 +8,7 @@ var TicketSchema = new Schema({
 	location: String,
 	date: {type: Date, default: Date.now },
 	seen: {type: Boolean, default: false},
+	open: {type: Boolean, default: true},
 	ticketStatus: {type: String, default: 'Submitted'}
 });
 

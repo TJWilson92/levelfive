@@ -9,32 +9,15 @@ block content
         h1 Please login please
 
     if (user)
-      .jumbotron
+
+      //- Set heading in Jumbotron
+      if (!user.isAdmin)
+        .jumbotron
           h1 Welcome, #{user.firstname}
-          button.btn-primary#tktbtn Button
-
-      if ((Date.now() - user.lastLoggedIn) > 60000000)
-        .panel.panel-warning#locationBox
-          .panel-heading
-            h2 Need your location!
-          .panel-body
-            p Please enter where you are so we can send a ticket to you
-            input#locationBar
-            button#locationButton.btn.btn-primary Send   
-
-      .panel.panel-default
-        .panel-heading
-          h2 Your Tickets     
-        .panel-body
-          table.table
-            thead
-              tr
-                th Question
-                th Message
-                th Seen?
-                th Close Ticket
-            tbody#ticketTable
-              
+      if (user.isAdmin)
+        .jumbotron(style={background: '#6BB9F0'})
+          h1 Admin Home: #{user.firstname}
+          button.btn.btn-primary#unseentickets Unseen Tickets
 
       .panel.panel-success
         .panel-heading
@@ -48,9 +31,86 @@ block content
             .form-group(align='right')
               button.btn.btn-primary#tktSubmit Submit
 
-      .panel.panel-primary
+      //- Stuff that students will see
+
+
+      if (!user.isAdmin)
+        //- Re-fill their location if it's been a while
+        if ((Date.now() - user.lastLoggedIn) > 6000000)
+          .panel.panel-warning#locationBox
+            .panel-heading
+              h2 Need your location!
+            .panel-body
+              p Please enter where you are so we can send a ticket to you
+              input#locationBar
+              button#locationButton.btn.btn-primary Send   
+        
+        //- All of their tickets - only if they've not closed them
+        .panel.panel-default
           .panel-heading
-              h2 Your tickets
+            h2 Your Tickets     
           .panel-body
-              p Some stuff
-  
+            table.table
+              thead
+                tr
+                  th Question
+                  th Message
+                  th Seen?
+                  th Close Ticket
+              tbody#ticketTable
+                
+        
+
+      //- Set Admin Facilities
+      if (user.isAdmin)
+        
+        //- See all unseen tickets
+        .panel.panel-primary
+          .panel-heading
+            h2 Unseen tickets
+          .panel-body
+            table.table
+              thead
+                tr
+                  th Student
+                  th Question
+                  th Message
+                  th Time 
+                  th Mark as Seen
+                  th Change Status
+              tbody
+                tbody#unseenTicketsTable
+
+        //- See all seen tickets
+        .panel.panel-info
+          .panel-heading
+            h2 Seen tickets
+          .panel-body
+            table.table
+              thead
+                tr
+                  th Student
+                  th Question
+                  th Message
+                  th Time 
+                  th Mark as Closed
+                  th Change Status
+              tbody
+                tbody#seenTicketsTable
+
+        //- See all closed tickets
+        .panel.panel-warning
+          .panel-heading
+            h2 Closed tickets
+          .panel-body
+            table.table
+              thead
+                tr
+                  th Student
+                  th Question
+                  th Message
+                  th Time 
+                  th Re-open
+              tbody
+                tbody#closedTicketsTable
+    
