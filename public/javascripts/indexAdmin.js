@@ -2,8 +2,11 @@ $(document).ready(function(){
 	
 	var adminGetTickets = function (ticket_url, callback) {
 		$.ajax({
-			url: '/getTickets' + ticket_url,
-			method: 'get'
+			url: '/getTicketsUnseen',
+			method: 'GET', 
+			data: {
+				ticketType: ticket_url,
+			}
 		}).done(function(results){
 			callback(results);
 		});
@@ -33,6 +36,31 @@ $(document).ready(function(){
 				indTicket.push(curr[3]);
 				indTicket.push(newCol);
 				indTicket.push('<button onclick="markAsSeen(\'' + curr[4] + '\')" class="btn btn-primary">Seen</button>')
+				indTicket.push(newCol);
+				// promptForStatus() is defined in index.jade as needs to be accessible.
+				indTicket.push('<button onclick="promptForStatus(\'' + curr[4] + '\')" class="btn btn-primary">Update</button>')
+				indTicket.push('</td></tr>');
+				totalHtml.push(indTicket.join(''));
+
+				if (ind == array.length - 1) {
+					console.log(totalHtml);
+					$(table).replaceWith(totalHtml.join(''));
+				}
+			})	
+		} else if (type == "Seen") {
+			// Ticket takes order: Student name (email), question, message, date, _id
+			tickets.forEach(function(curr, ind, array){
+				indTicket = [];
+				indTicket.push('<tr><td>');
+				indTicket.push(curr[0]);
+				indTicket.push(newCol);
+				indTicket.push(curr[1]);
+				indTicket.push(newCol);
+				indTicket.push(curr[2]);
+				indTicket.push(newCol);
+				indTicket.push(curr[3]);
+				indTicket.push(newCol);
+				indTicket.push('<button onclick="markAsClose(\'' + curr[4] + '\')" class="btn btn-primary">Close</button>')
 				indTicket.push(newCol);
 				// promptForStatus() is defined in index.jade as needs to be accessible.
 				indTicket.push('<button onclick="promptForStatus(\'' + curr[4] + '\')" class="btn btn-primary">Update</button>')
@@ -84,8 +112,8 @@ $(document).ready(function(){
 	}
 
 	var seenTkts = function(){
-		adminGetTickets('getSeenTickets', function(results){
-
+		adminGetTickets('Seen', function(results){
+			addTicketToPanel(results, '#seenTicketsTable');
 		})
 	}
 
@@ -98,6 +126,10 @@ $(document).ready(function(){
 
 	$('#unseentickets').click(function(){
 		unseenTkts();
+	})
+
+	$('#seenTickets').click(function(){
+		seenTkts();
 	})
 	
 });

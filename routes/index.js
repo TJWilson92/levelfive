@@ -194,35 +194,64 @@ router.get('/getTickets', function(req, res, next){
     });
 });
 
-router.get('/getTicketsUnseen', function(req, res, next){
-    results = []
-    Ticket.find( {
-        $and : [
-            { open : true},
-            { seen : false}
-        ]
-    }, function(err, tickets){
-        if (tickets.length == 0) {
-            res.send('no tickets');
-        } else {
-            tickets.forEach(function(curr, ind, arr){
-                    Account.findOne({_id : curr.student}, function(err, account){
-                        // Ticket takes order: Student name (email), question, message, date, _id
-                        ticketResult = [];
-                        ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
-                        ticketResult.push(curr.currentQuestion);
-                        ticketResult.push(curr.message);
-                        ticketResult.push(curr.date);
-                        ticketResult.push(curr._id);
-                        results.push(ticketResult);
-                        
-                        if (ind == (arr.length - 1)) {
-                            res.send(results);
-                        };
-                    });
-            })
-        }
+// Function for finding, formatting, and returning tickets, for queries used by admin.
+var returnTickets = function(tickets, callback){
+    var results = [];
+    tickets.forEach(function(curr, ind, arr) {
+        Account.findOne({_id : curr.student}, function(err, account) {
+            var ticketResult = [];
+            ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
+            ticketResult.push(curr.currentQuestion);
+            ticketResult.push(curr.message);
+            ticketResult.push(curr.date);
+            ticketResult.push(curr._id);
+            results.push(ticketResult);
+            
+            if (ind == (arr.length - 1)) {
+                console.log(results);
+                callback(results)
+            };
+        });
     })
+}
+
+router.get('/getTicketsUnseen', function(req, res, next){
+    ticketType = req.query.ticketType
+    if (ticketType == "Unseen") {
+        console.log('finding unseen tickets');
+
+        Ticket.find( { 
+            $and : [
+                { open : true},
+                { seen : false}
+            ]
+        }, function(err, tickets) {
+            if (tickets.length == 0) {
+                res.send('No Tickets')
+            } else {
+                var results = returnTickets(tickets, function(arr){
+                    res.send(arr);
+                });
+            };
+        });
+
+    } else {
+        Ticket.find( { 
+            $and : [
+                { open: true},
+                { seen: true}
+            ]
+        }, function(err, tickets) {
+           if (tickets.length == 0) {
+                res.send('No Tickets')
+            } else {
+                console.log("should be here");
+                var results = returnTickets(tickets, function(arr){
+                    res.send(arr);
+                });  
+            };
+        });
+    }
 });
 
 module.exports = router;

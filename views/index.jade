@@ -33,6 +33,15 @@ block content
       })
     }
 
+    var markAsClosed = function(ticketId){
+    $.ajax({
+      url: '/tickets/markAsClosed',
+      method: 'post',
+      data: {ticket_id: ticketId},
+      dataType: 'json'
+      })
+    }
+
   .container
     if (!user)
      .jumbotron
@@ -48,6 +57,7 @@ block content
         .jumbotron(style={background: '#6BB9F0'})
           h1 Admin Home: #{user.firstname}
           button.btn.btn-primary#unseentickets Unseen Tickets
+          button.btn.btn-primary#seenTickets Seen Tickets
 
       .panel.panel-success
         .panel-heading

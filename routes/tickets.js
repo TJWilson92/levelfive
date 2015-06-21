@@ -62,6 +62,14 @@ router.post('/markAsSeen', function(req, res, next){
 	});
 })
 
+router.post('/markAsClosed', function(req, res, next){
+	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
+		ticket.closed = true;
+		ticket.save();
+		res.send('complete')
+	});
+})
+
 router.post('/updateTicketStatus', function(req, res, next){
 	console.log('Following data received:')
 	console.log(req.body);
