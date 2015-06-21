@@ -202,20 +202,26 @@ router.get('/getTicketsUnseen', function(req, res, next){
             { seen : false}
         ]
     }, function(err, tickets){
-        tickets.forEach(function(curr, ind, arr){
-            Account.findOne({_id : curr.student}, function(err, account){
-                ticketResult = [];
-                ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
-                ticketResult.push(curr.currentQuestion);
-                ticketResult.push(curr.message);
-                ticketResult.push(curr.date);
-                results.push(ticketResult);
-                
-                if (ind == (arr.length - 1)) {
-                    res.send(results);
-                };
-            });
-        })
+        if (tickets.length == 0) {
+            res.send('no tickets');
+        } else {
+            tickets.forEach(function(curr, ind, arr){
+                    Account.findOne({_id : curr.student}, function(err, account){
+                        // Ticket takes order: Student name (email), question, message, date, _id
+                        ticketResult = [];
+                        ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
+                        ticketResult.push(curr.currentQuestion);
+                        ticketResult.push(curr.message);
+                        ticketResult.push(curr.date);
+                        ticketResult.push(curr._id);
+                        results.push(ticketResult);
+                        
+                        if (ind == (arr.length - 1)) {
+                            res.send(results);
+                        };
+                    });
+            })
+        }
     })
 });
 

@@ -3,6 +3,36 @@ extends layout
 block content
   script(type='text/javascript').
     var local_data =!{JSON.stringify(user)}
+
+    var promptForStatus = function(ticketId){
+      console.log('Called promptForStatus');
+      var newStatus = prompt("Enter new Ticket Status");
+      if (newStatus != null) {
+        $.ajax({
+          url: '/tickets/updateTicketStatus',
+          method: 'post',
+          dataType: 'json',
+          data: {
+            ticket_id: ticketId,
+            statusUpdate: newStatus
+          }
+        }).done(function(){
+          console.log('Made Ajax call');
+        });
+      } else {
+        alert('Invalid Status');
+      }
+    }
+
+    var markAsSeen = function(ticketId){
+    $.ajax({
+      url: '/tickets/markAsSeen',
+      method: 'post',
+      data: {ticket_id: ticketId},
+      dataType: 'json'
+      })
+    }
+
   .container
     if (!user)
      .jumbotron

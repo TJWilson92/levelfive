@@ -45,16 +45,30 @@ router.post('/new', function(req, res){
 });
 
 router.post('/studentCloseTicket', function(req, res, next){
-	console.log("Reached studentCloseTicket");
-	console.log(req.body.ticketId);
-	
-
 	Ticket.findOne({'_id' : req.body.ticketId}, function(err, ticket){
 		console.log(ticket);
 		ticket.ticketStatus = "Closed (by student)";
 		ticket.save();
 		console.log(ticket);
-		res.redirect(301, '/');
+		res.send('Ticket Closed')
+	});
+})
+
+router.post('/markAsSeen', function(req, res, next){
+	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
+		ticket.seen = true;
+		ticket.save();
+		res.send('complete')
+	});
+})
+
+router.post('/updateTicketStatus', function(req, res, next){
+	console.log('Following data received:')
+	console.log(req.body);
+	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
+		ticket.ticketStatus = req.body.statusUpdate
+		ticket.save();
+		res.send('Ticket Edited');
 	});
 })
 module.exports = router;
