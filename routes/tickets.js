@@ -64,19 +64,26 @@ router.post('/markAsSeen', function(req, res, next){
 
 router.post('/markAsClosed', function(req, res, next){
 	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
-		ticket.closed = true;
+		ticket.open = false;
 		ticket.save();
 		res.send('complete')
 	});
 })
 
 router.post('/updateTicketStatus', function(req, res, next){
-	console.log('Following data received:')
-	console.log(req.body);
 	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
 		ticket.ticketStatus = req.body.statusUpdate
 		ticket.save();
 		res.send('Ticket Edited');
 	});
+});
+
+router.post('/reopen', function(req, res, next){
+	var ticket_id = req.body.ticket_id
+	Ticket.findOne({"_id": ticket_id}, function(err, ticket){
+		ticket.open = true;
+		ticket.save();
+		res.send('Ticket Updated!');
+	})
 })
 module.exports = router;

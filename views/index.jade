@@ -30,6 +30,8 @@ block content
       method: 'post',
       data: {ticket_id: ticketId},
       dataType: 'json'
+      }).done(function(results){
+        unseenTkts();
       })
     }
 
@@ -39,7 +41,21 @@ block content
       method: 'post',
       data: {ticket_id: ticketId},
       dataType: 'json'
+      }).done(function(results){
+        unseenTkts();
       })
+    }
+
+    var reopenTicket = function(ticketId){
+      $.ajax({
+          url: '/tickets/reopen',
+          method: 'post',
+          data: {ticket_id: ticketId},
+          dataType: 'json',
+        }).done(function(results){
+          alert(results);
+          closedTkts();
+        });
     }
 
   .container
@@ -58,6 +74,7 @@ block content
           h1 Admin Home: #{user.firstname}
           button.btn.btn-primary#unseentickets Unseen Tickets
           button.btn.btn-primary#seenTickets Seen Tickets
+          button.btn.btn-primary#closedTickets Closed Tickets
 
       .panel.panel-success
         .panel-heading

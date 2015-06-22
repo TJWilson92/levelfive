@@ -235,7 +235,7 @@ router.get('/getTicketsUnseen', function(req, res, next){
             };
         });
 
-    } else {
+    } else if (ticketType == "Seen") {
         Ticket.find( { 
             $and : [
                 { open: true},
@@ -245,12 +245,17 @@ router.get('/getTicketsUnseen', function(req, res, next){
            if (tickets.length == 0) {
                 res.send('No Tickets')
             } else {
-                console.log("should be here");
                 var results = returnTickets(tickets, function(arr){
                     res.send(arr);
                 });  
             };
         });
+    } else if (ticketType == "Closed") {
+        Ticket.find({open: false}, function(err, tickets){
+            var results = returnTickets(tickets, function(arr){
+                res.send(arr);
+            })
+        })
     }
 });
 
