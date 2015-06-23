@@ -4,59 +4,7 @@ block content
   script(type='text/javascript').
     var local_data =!{JSON.stringify(user)}
 
-    var promptForStatus = function(ticketId){
-      console.log('Called promptForStatus');
-      var newStatus = prompt("Enter new Ticket Status");
-      if (newStatus != null) {
-        $.ajax({
-          url: '/tickets/updateTicketStatus',
-          method: 'post',
-          dataType: 'json',
-          data: {
-            ticket_id: ticketId,
-            statusUpdate: newStatus
-          }
-        }).done(function(){
-          console.log('Made Ajax call');
-        });
-      } else {
-        alert('Invalid Status');
-      }
-    }
-
-    var markAsSeen = function(ticketId){
-    $.ajax({
-      url: '/tickets/markAsSeen',
-      method: 'post',
-      data: {ticket_id: ticketId},
-      dataType: 'json'
-      }).done(function(results){
-        unseenTkts();
-      })
-    }
-
-    var markAsClosed = function(ticketId){
-    $.ajax({
-      url: '/tickets/markAsClosed',
-      method: 'post',
-      data: {ticket_id: ticketId},
-      dataType: 'json'
-      }).done(function(results){
-        unseenTkts();
-      })
-    }
-
-    var reopenTicket = function(ticketId){
-      $.ajax({
-          url: '/tickets/reopen',
-          method: 'post',
-          data: {ticket_id: ticketId},
-          dataType: 'json',
-        }).done(function(results){
-          alert(results);
-          closedTkts();
-        });
-    }
+    
 
   .container
     if (!user)
@@ -75,7 +23,7 @@ block content
           button.btn.btn-primary#unseentickets Unseen Tickets
           button.btn.btn-primary#seenTickets Seen Tickets
           button.btn.btn-primary#closedTickets Closed Tickets
-
+          
       .panel.panel-success
         .panel-heading
           h2 New Ticket 
