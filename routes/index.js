@@ -2,6 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
 var Ticket = require('../models/ticket')
+var ObjectId = require('mongoose').Types.ObjectId;
 var plm = require('passport-local-mongoose');
 var router = express.Router();
 
@@ -10,7 +11,7 @@ router.get('/', function (req, res) {
     if (!req.user) {
         res.redirect('login');
     } else {
-        res.render('index', { 
+        res.render('index', {
             user : req.user,
             title : "Levelfour" });
     }
@@ -29,7 +30,7 @@ router.post('/register', function(req, res) {
     req.assert('password', 'Passwords must match').passwordsMatch(req.body.password2);
 
     var errors = req.validationErrors();
-    
+
     if (errors) {
         res.render('register', {
             errors: errors,
@@ -51,7 +52,7 @@ router.post('/register', function(req, res) {
     Account.register(newAccount, req.body.password, function(err, account) {
         if (err) {
             console.log(err);
-            return res.render('register', { 
+            return res.render('register', {
                 account : account,
                 errors : err
                 });
@@ -67,8 +68,8 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
 
-router.post('/login', 
-    passport.authenticate('local'), 
+router.post('/login',
+    passport.authenticate('local'),
     function(req, res) {
         console.log(Date.now() - req.user.lastLoggedIn);
         req.user.lastLoggedIn = Date.now();
@@ -100,14 +101,14 @@ router.get('/myaccount', function(req, res, next){
 
 router.post('/myaccount', function(req, res, next){
     var user = req.user;
-    // Validate the form 
+    // Validate the form
     req.checkBody('username', 'Must have username').notEmpty();
     req.checkBody('firstname', 'Need name').notEmpty();
     req.checkBody('surname', 'Need surname').notEmpty();
     req.checkBody('password', 'You must enter your password to change anything').notEmpty();
 
     var errors = req.validationErrors();
-    
+
     if (errors) {
         res.render('myaccount', {
             errors: errors,
@@ -117,7 +118,7 @@ router.post('/myaccount', function(req, res, next){
             surname: req.body.surname,
             yearofstudy: req.body.yearofstudy
         });
-    } else { 
+    } else {
         req.user.authenticate(req.body.password, function(err, thisModel, passwordErr){
             if (err) throw err;
             if (passwordErr) {
@@ -131,15 +132,15 @@ router.post('/myaccount', function(req, res, next){
                 });
             } else {
                 Account.update({
-                    username:user.username}, 
+                    username:user.username},
                     {
                         username: req.body.username,
                         email: req.body.username + "@soton.ac.uk",
                         firstname: req.body.firstname,
                         surname: req.body.surname,
                         yearofstudy: req.body.yearofstudy
-                    }, 
-                    {multi : false }, 
+                    },
+                    {multi : false },
                     function(err){
                         if (err) throw err;
                     });
@@ -188,7 +189,7 @@ router.get('/getTickets', function(req, res, next){
         $and : [
          { student: req.user.id },
          { ticketStatus: {'$ne' : "Closed (by student)"} }
-         ] 
+         ]
      }, function(err, tckts){
         res.send(tckts);
     });
@@ -198,7 +199,7 @@ router.get('/getTickets', function(req, res, next){
 var returnTickets = function(tickets, callback){
     var results = [];
     tickets.forEach(function(curr, ind, arr) {
-        Account.findOne({_id : curr.student}, function(err, account) {
+        Account.findOne({_id : ObjectId(curr.student)}, function(err, account) {
             var ticketResult = [];
             ticketResult.push(account.firstname +  ' ' + account.surname + ' (' + account.email + ')');
             ticketResult.push(curr.currentQuestion);
@@ -206,7 +207,7 @@ var returnTickets = function(tickets, callback){
             ticketResult.push(curr.date);
             ticketResult.push(curr._id);
             results.push(ticketResult);
-            
+
             if (ind == (arr.length - 1)) {
                 console.log(results);
                 callback(results)
@@ -220,7 +221,7 @@ router.get('/getTicketsUnseen', function(req, res, next){
     if (ticketType == "Unseen") {
         console.log('finding unseen tickets');
 
-        Ticket.find( { 
+        Ticket.find( {
             $and : [
                 { open : true},
                 { seen : false}
@@ -236,7 +237,7 @@ router.get('/getTicketsUnseen', function(req, res, next){
         });
 
     } else if (ticketType == "Seen") {
-        Ticket.find( { 
+        Ticket.find( {
             $and : [
                 { open: true},
                 { seen: true}
@@ -247,7 +248,7 @@ router.get('/getTicketsUnseen', function(req, res, next){
             } else {
                 var results = returnTickets(tickets, function(arr){
                     res.send(arr);
-                });  
+                });
             };
         });
     } else if (ticketType == "Closed") {

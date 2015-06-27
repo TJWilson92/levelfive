@@ -55,7 +55,7 @@ var promptForStatus = function(ticketId){
 var adminGetTickets = function (ticket_url, callback) {
 	$.ajax({
 		url: '/getTicketsUnseen',
-		method: 'GET', 
+		method: 'GET',
 		data: {
 			ticketType: ticket_url,
 		}
@@ -91,7 +91,9 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push('<tr><td>');
 				indTicket.push(curr[0]);
 				indTicket.push(newCol);
+        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
 				indTicket.push(curr[1]);
+        indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[2]);
 				indTicket.push(newCol);
@@ -105,7 +107,7 @@ var addTicketToPanel = function(tickets, table, type){
 				totalHtml.push(indTicket.join(''));
 
 				isEndOfTickets(ind, array, table, totalHtml);
-			});	
+			});
 		} else if (type == "Seen") {
 			// Ticket takes order: Student name (email), question, message, date, _id
 			tickets.forEach(function(curr, ind, array){
@@ -113,7 +115,9 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push('<tr><td>');
 				indTicket.push(curr[0]);
 				indTicket.push(newCol);
+        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
 				indTicket.push(curr[1]);
+        indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[2]);
 				indTicket.push(newCol);
@@ -125,16 +129,18 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push('<button onclick="promptForStatus(\'' + curr[4] + '\')" class="btn btn-primary">Update</button>')
 				indTicket.push('</td></tr>');
 				totalHtml.push(indTicket.join(''));
-				
+
 				isEndOfTickets(ind, array, table, totalHtml);
-			});	
+			});
 		} else if (type == "Closed") {
 			tickets.forEach(function(curr, ind, array){
 				var indTicket=[];
 				indTicket.push('<tr><td>');
 				indTicket.push(curr[0]);
 				indTicket.push(newCol);
+        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
 				indTicket.push(curr[1]);
+        indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[2]);
 				indTicket.push(newCol);

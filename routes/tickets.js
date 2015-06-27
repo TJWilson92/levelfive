@@ -1,16 +1,51 @@
 var express = require('express');
 var passport = require('passport');
 var Ticket =  require('../models/ticket');
+var Account = require('../models/account');
+var ObjectId = require('mongoose').Types.ObjectId;
 var router = express.Router();
+
+router.get('/show/:id', function(req, res, next){
+	if (!req.user) {
+		res.render('login');
+	} else {
+		Ticket.findOne({_id: ObjectId(req.params.id)}, function(err, ticket){
+			Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
+				if (req.user.isAdmin || student._id == req.user._id) {
+					res.render('ticket/show', {
+						ticket: ticket,
+						user: req.user,
+						student: student
+					});
+				} else {
+					res.render('index');
+				}
+			});
+		});
+	}
+});
+
+router.get('/your_tickets', function(req, res, next) {
+	Account.findOne({_id: ObjectId(req.user._id)}, function(err, account){
+		if (account.isAdmin || account.isDemonstrator) {
+			Ticket.find({handledBy : account._id}, function(err, tickets){
+				console.log(tickets);
+				res.render('ticket/your_tickets', {tickets:tickets});
+			})
+		} else {
+			Ticket.find({student:account._id}, function(err, tickets){
+				res.render('tickets/your_tickets',
+				{tickets:tickets});
+			})
+		}
+	})
+})
 
 router.get('/new', function(req, res, next){
 	res.render('ticket/new')
 })
 
 router.post('/new', function(req, res){
-
-
-
 	var t_title = req.body.mes_title;
 	var t_message = req.body.mes_message;
 	var t_location = req.body.mes_location;
@@ -39,9 +74,9 @@ router.post('/new', function(req, res){
 
 	newTicket.save(function (err){
 		if (err) return handleError(err);
-		res.redirect('/');	
-	});	
-	};	
+		res.redirect('/');
+	});
+	};
 });
 
 router.post('/studentCloseTicket', function(req, res, next){
@@ -57,6 +92,7 @@ router.post('/studentCloseTicket', function(req, res, next){
 router.post('/markAsSeen', function(req, res, next){
 	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
 		ticket.seen = true;
+		ticket.handledBy = req.user._id;
 		ticket.save();
 		res.send('complete')
 	});

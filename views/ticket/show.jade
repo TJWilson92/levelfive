@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+  .container 
+    .jumbotron
+      h1 Showing Ticket
+    
+    .panel.panel-primary
+      .panel-heading
+        h2 Ticket Id: #{ticket.id}
+      .panel-body
+        table.table 
+          thead
+            tr
+              th 
+              th 
+          tbody
+            tr
+              td Student
+              td #{student.firstname} #{student.surname} (#{student.email})
+            tr
+              td Student Location
+              td #{ticket.location}
+            tr
+              td Question
+              td #{ticket.currentQuestion}
+            tr
+              td Student Comments
+              td #{ticket.message}
+            tr
+              td Ticket Seen
+              td #{ticket.seen}
+            tr 
+              td Ticket Open
+              td #{ticket.open}
+            tr
+              td Status Notes
+              td #{ticket.status}
+          
