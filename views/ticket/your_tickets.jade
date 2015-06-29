@@ -4,9 +4,9 @@ block content
   .container
     .jumbotron
       h1 Your Tickets 
-  
-  
-    //- Open Tickets  
+          
+    h2 Open Tickets
+    
     for ticket in openTickets
       .panel.panel-primary
         .panel-heading
@@ -40,17 +40,19 @@ block content
                 td Status Notes
                 td #{ticket.status}
       
+    h2 Closed Tickets  
+    
+    
+    table.table 
+      thead 
+        tr 
+          th Student
+          th Question
+          th Time
+      tbody 
+        for ticket in closedTickets
+          tr
+            td #{ticket._student.firstname} #{ticket._student.surname} (#{ticket._student.email})
+            td #{ticket.currentQuestion}
+            td #{ticket.date}
       
-    //- Deal with closed tickets 
-    //- 
-    //- table.table 
-    //-   thead 
-    //-     tr 
-    //-       th Student
-    //-       th Question
-    //-       th Time
-    //-   tbody 
-    //-     for ticket in closedTickets
-    //-       tr
-    //-         td #{ticket.}
-    //-   

@@ -37,9 +37,9 @@ body
               a(href='/register') Register
           else 
             li 
-              a(href='#') New Ticket
+              a(href='/tickets/new') New Ticket
             li 
-              a(href='#') Your Tickets
+              a(href='tickets/your_tickets') Your Tickets
         
         ul.nav.navbar-nav.navbar-right
           if (user)
@@ -48,8 +48,3 @@ body
       
             
   block content
-
-
-
-
-

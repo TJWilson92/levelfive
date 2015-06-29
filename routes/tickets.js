@@ -28,9 +28,23 @@ router.get('/show/:id', function(req, res, next){
 router.get('/your_tickets', function(req, res, next) {
 	Account.findOne({_id: ObjectId(req.user._id)}, function(err, account){
 		if (account.isAdmin || account.isDemonstrator) {
-			Ticket.find({handledBy : account._id}, function(err, tickets){
+			Ticket.find({handledBy: ObjectId(account._id)}, function(err, tickets){
+
+				var openTickets = tickets.filter(function(item){
+					return item.open;
+				});
+
+				var closedTickets = tickets.filter(function(item){
+					return !item.open;
+				});
+
 				console.log(tickets);
-				res.render('ticket/your_tickets', {tickets:tickets});
+				res.render('ticket/your_tickets', {
+					allTickets:tickets,
+					openTickets: openTickets,
+					closedTickets: closedTickets
+					}
+				);
 			})
 		} else {
 			Ticket.find({student:account._id}, function(err, tickets){
