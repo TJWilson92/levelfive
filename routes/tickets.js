@@ -26,34 +26,57 @@ router.get('/show/:id', function(req, res, next){
 });
 
 router.get('/your_tickets', function(req, res, next) {
-	Account.findOne({_id: ObjectId(req.user._id)}, function(err, account){
-		if (account.isAdmin || account.isDemonstrator) {
-			Ticket.find({handledBy: ObjectId(account._id)}, function(err, tickets){
+	if (!req.user) {
+		res.render('login');
+	}
+	else {
+		Account.findOne({_id: ObjectId(req.user._id)}, function(err, account){
+			if (account.isAdmin || account.isDemonstrator) {
+				Ticket.find({handledBy: ObjectId(account._id)}, function(err, tickets){
+					var accObjects = [];
+					tickets.forEach(function(val, ind, array){
+						Account.findOne({_id: ObjectId(val.student)}, function(err, student){
+								var newObj = {
+									ticketId: val._id,
+									firstname: account.firstname,
+									surname: account.surname,
+									email: account.email,
+									question: val.currentQuestion,
+									studentLocation: val.location,
+									studentMessage: val.message,
+									ticketStatus: val.ticketStatus,
+									seen: val.seen,
+									open: val.open
+								};
+								accObjects.push(newObj);
+								if (accObjects.length == tickets.length) {
 
-				var openTickets = tickets.filter(function(item){
-					return item.open;
+									var openTickets = accObjects.filter(function(item){
+										return item.open;
+									});
+
+									var closedTickets = accObjects.filter(function(item){
+										return !item.open;
+									});
+									res.render('ticket/your_tickets', {
+										user: req.user,
+										title: "Your Tickets",
+										openTickets: openTickets,
+										closedTickets: closedTickets
+									});
+								}
+						});
+					});
 				});
-
-				var closedTickets = tickets.filter(function(item){
-					return !item.open;
+			} else {
+				Ticket.find({student: ObjectId(account._id)}, function(err, tickets){
+					res.render('tickets/your_tickets',
+					{tickets:tickets});
 				});
-
-				console.log(tickets);
-				res.render('ticket/your_tickets', {
-					allTickets:tickets,
-					openTickets: openTickets,
-					closedTickets: closedTickets
-					}
-				);
-			})
-		} else {
-			Ticket.find({student:account._id}, function(err, tickets){
-				res.render('tickets/your_tickets',
-				{tickets:tickets});
-			})
-		}
-	})
-})
+			}
+		})
+	}
+});
 
 router.get('/new', function(req, res, next){
 	res.render('ticket/new')

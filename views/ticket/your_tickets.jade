@@ -1,16 +1,17 @@
 extends ../layout
-
+  
 block content
+  
   .container
     .jumbotron
       h1 Your Tickets 
-          
+
     h2 Open Tickets
     
-    for ticket in openTickets
+    for ticket in openTickets 
       .panel.panel-primary
         .panel-heading
-          h2 Ticket Id: #{ticket._id}
+          h2 Ticket Id: #{ticket.ticketId}
         .panel-body
           table.table 
             thead
@@ -20,16 +21,17 @@ block content
             tbody
               tr
                 td Student
-                td #{ticket.student.firstname} #{ticket.student.surname} (#{ticket.student.email})
+                td 
+                  a(href='show/' + ticket.ticketId) #{ticket.firstname} #{ticket.surname} (#{ticket.email})
               tr
                 td Student Location
-                td #{ticket.location}
+                td #{ticket.studentLocation}
               tr
                 td Question
-                td #{ticket.currentQuestion}
+                td #{ticket.question}
               tr
                 td Student Comments
-                td #{ticket.message}
+                td #{ticket.studentMessage}
               tr
                 td Ticket Seen
                 td #{ticket.seen}
@@ -38,21 +40,18 @@ block content
                 td #{ticket.open}
               tr
                 td Status Notes
-                td #{ticket.status}
-      
+                td #{ticket.ticketStatus}
+
     h2 Closed Tickets  
-    
-    
+        
     table.table 
       thead 
         tr 
           th Student
           th Question
-          th Time
       tbody 
         for ticket in closedTickets
           tr
-            td #{ticket._student.firstname} #{ticket._student.surname} (#{ticket._student.email})
+            td #{ticket.firstname} #{ticket.surname} (#{ticket.email})
             td #{ticket.currentQuestion}
-            td #{ticket.date}
       

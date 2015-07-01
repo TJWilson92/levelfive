@@ -63,6 +63,7 @@ var adminGetTickets = function (ticket_url, callback) {
 		callback(results);
 	});
 };
+
 // Tickets is the returned JSON data from ajax
 // Table is the name of the html element where the table rows need to go
 // Type is the kind of tickets they are, possibilities: "Open", "Unseen", "Closed"
