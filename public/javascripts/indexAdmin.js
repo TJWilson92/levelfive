@@ -20,17 +20,6 @@ markAsClosed = function(ticketId){
   seenTkts();
 }
 
-reopenTicket = function(ticketId){
-  $.ajax({
-      url: '/tickets/reopen',
-      method: 'post',
-      data: {ticket_id: ticketId},
-      dataType: 'json',
-    });
-  seenTkts();
-  closedTkts();
-}
-
 var promptForStatus = function(ticketId){
   console.log('Called promptForStatus');
   var newStatus = prompt("Enter new Ticket Status");
@@ -133,27 +122,7 @@ var addTicketToPanel = function(tickets, table, type){
 
 				isEndOfTickets(ind, array, table, totalHtml);
 			});
-		} else if (type == "Closed") {
-			tickets.forEach(function(curr, ind, array){
-				var indTicket=[];
-				indTicket.push('<tr><td>');
-				indTicket.push(curr[0]);
-				indTicket.push(newCol);
-        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
-				indTicket.push(curr[1]);
-        indTicket.push('</a>');
-				indTicket.push(newCol);
-				indTicket.push(curr[2]);
-				indTicket.push(newCol);
-				indTicket.push(curr[3]);
-				indTicket.push(newCol);
-				indTicket.push('<button onclick="reopenTicket(\'' + curr[4] + '\')" class="btn btn-primary">Re-open</button>');
-				indTicket.push('</td></tr>');
-				totalHtml.push(indTicket.join(''));
-
-				isEndOfTickets(ind, array, table, totalHtml);
-			})
-		};
+		}
 	}
 };
 
@@ -180,13 +149,6 @@ var seenTkts = function(callbacks){
 	});
 }
 
-var closedTkts = function(callbacks){
-	adminGetTickets('Closed', function(results){
-		document.getElementById('closedTicketsTable').innerHTML = "Loading";
-		addTicketToPanel(results, 'closedTicketsTable', "Closed");
-	});
-}
-
 var ticketFunction = function(){
 
 	getTickets(function(results){
@@ -203,14 +165,12 @@ $(document).ready(function(){
 		seenTkts();
 	});
 
-	$('#closedTickets').click(function(){
-		closedTkts();
-	})
+  unseenTkts();
+  seenTkts();
 
 	window.setInterval(function(){
 		unseenTkts();
 		seenTkts();
-		closedTkts();
 	}, 10000);
 
 })

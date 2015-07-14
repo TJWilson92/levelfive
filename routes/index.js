@@ -6,7 +6,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var plm = require('passport-local-mongoose');
 var router = express.Router();
 
-
+// This is a change of file
 router.get('/', function (req, res) {
     if (!req.user) {
         res.redirect('login');

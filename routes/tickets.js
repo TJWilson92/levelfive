@@ -55,14 +55,11 @@ router.get('/your_tickets', function(req, res, next) {
 										return item.open;
 									});
 
-									var closedTickets = accObjects.filter(function(item){
-										return !item.open;
-									});
+
 									res.render('ticket/your_tickets', {
 										user: req.user,
 										title: "Your Tickets",
 										openTickets: openTickets,
-										closedTickets: closedTickets
 									});
 								}
 						});
@@ -118,11 +115,8 @@ router.post('/new', function(req, res){
 
 router.post('/studentCloseTicket', function(req, res, next){
 	Ticket.findOne({'_id' : req.body.ticketId}, function(err, ticket){
-		console.log(ticket);
-		ticket.ticketStatus = "Closed (by student)";
-		ticket.save();
-		console.log(ticket);
-		res.send('Ticket Closed')
+		ticket.remove();
+		res.send('Ticket deleted')
 	});
 })
 
