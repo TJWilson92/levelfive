@@ -14,7 +14,9 @@ var Account = new Schema({
 	isDemonstrator: {type: Boolean, default: false},
 	isAdmin: {type: Boolean, default: false},
 	lastUpdated: Date,
-	lastLoggedIn: Date
+	lastLoggedIn: Date,
+	comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+	tickets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Ticket'}]
 });
 
 Account.plugin(passportLocalMongoose);

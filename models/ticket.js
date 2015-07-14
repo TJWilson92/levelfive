@@ -11,7 +11,8 @@ var TicketSchema = new Schema({
 	seen: {type: Boolean, default: false},
 	open: {type: Boolean, default: true},
 	ticketStatus: {type: String, default: 'Submitted'},
-	handledBy: {type: mongoose.Schema.Types.ObjectId, ref: 'Account'},
+	handledBy: {type: Schema.Types.ObjectId, ref: 'Account'},
+	comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 });
 
 var Ticket = mongoose.model('Ticket', TicketSchema);

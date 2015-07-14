@@ -2,6 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var Ticket =  require('../models/ticket');
 var Account = require('../models/account');
+var Comment = require('../models/comment');
 var ObjectId = require('mongoose').Types.ObjectId;
 var router = express.Router();
 
@@ -9,13 +10,14 @@ router.get('/show/:id', function(req, res, next){
 	if (!req.user) {
 		res.render('login');
 	} else {
-		Ticket.findOne({_id: ObjectId(req.params.id)}, function(err, ticket){
+		Ticket.findOne({_id: ObjectId(req.params.id)}).populate('comments').exec(function(err, ticket){
 			Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
 				if (req.user.isAdmin || student._id == req.user._id) {
 					res.render('ticket/show', {
 						ticket: ticket,
 						user: req.user,
-						student: student
+						student: student,
+						comments: ticket.comments
 					});
 				} else {
 					res.render('index');
@@ -145,12 +147,4 @@ router.post('/updateTicketStatus', function(req, res, next){
 	});
 });
 
-router.post('/reopen', function(req, res, next){
-	var ticket_id = req.body.ticket_id
-	Ticket.findOne({"_id": ticket_id}, function(err, ticket){
-		ticket.open = true;
-		ticket.save();
-		res.send('Ticket Updated!');
-	})
-})
 module.exports = router;

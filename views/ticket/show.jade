@@ -36,4 +36,19 @@ block content
             tr
               td Status Notes
               td #{ticket.status}
+    
+    h2 Comments
+    each c in comments
+      .panel.panel-default
+        .panel-heading
+          h2 Comment from: #{c.account.firstname}
+    
+    form(role='form', action="/../../comments/new", method="post", style='max-width: 300px;')
+      .form-group
+        label Message
+        input.form-control(type='text', name='comment_text')
+        input(type='hidden', name='user_id', value=user._id)
+        input(type='hidden', name='ticket_id', value=ticket_id)
+      button.btn.btn-default(type='submit') Submit
+      
           
