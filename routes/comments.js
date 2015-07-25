@@ -6,6 +6,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var router = express.Router();
 
 router.post('/new', function(req, res, next){
+  console.log(req);
   var ticket_id = req.body.ticket_id;
   var account = req.user._id;
   var text = req.body.comment_text;
@@ -24,6 +25,13 @@ router.post('/new', function(req, res, next){
     res.redirect('/');
   });
 });
+
+router.get('/get_comments', function(req, res, next){
+  console.log(req);
+  Comment.find({ticket: ObjectId(req.ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
+    res.send(comments);
+  })
+})
 
 
 module.exports = router;

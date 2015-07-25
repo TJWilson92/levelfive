@@ -87,10 +87,6 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.get('/ping', function(req, res){
-    res.status(200).send("pong!");
-});
-
 router.get('/myaccount', function(req, res, next){
     if (!req.user) {
         res.redirect('login');
@@ -145,7 +141,6 @@ router.post('/myaccount', function(req, res, next){
                         if (err) throw err;
                     });
                 if (req.body.password1.length > 0) {
-                    console.log('Setting password');
                     req.user.setPassword(req.body.password1, function(err){
                         if (err) throw err;
                         req.user.save();
@@ -209,7 +204,6 @@ var returnTickets = function(tickets, callback){
             results.push(ticketResult);
 
             if (ind == (arr.length - 1)) {
-                console.log(results);
                 callback(results)
             };
         });
@@ -219,8 +213,6 @@ var returnTickets = function(tickets, callback){
 router.get('/getTicketsUnseen', function(req, res, next){
     ticketType = req.query.ticketType
     if (ticketType == "Unseen") {
-        console.log('finding unseen tickets');
-
         Ticket.find( {
             $and : [
                 { open : true},

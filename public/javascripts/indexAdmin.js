@@ -137,8 +137,9 @@ var unseenTkts = function(callbacks){
 	// This returns an array of tickets, configured to work with the tabe
 	// Row order: Student, Question, Message, Time, /mark as seen/, /change status/
 	adminGetTickets('Unseen', function(results){
-		document.getElementById('unseenTicketsTable').innerHTML = "Loading";
-		addTicketToPanel(results, 'unseenTicketsTable', 'Unseen');
+    if (results.length != 0) {
+      addTicketToPanel(results, 'unseenTicketsTable', 'Unseen');
+    }
 	});
 }
 

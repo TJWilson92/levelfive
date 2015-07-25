@@ -3,6 +3,7 @@ extends layout
 block content
   script(type='text/javascript').
     var local_data =!{JSON.stringify(user)}
+    console.log(local_data)
 
     
 
@@ -20,9 +21,6 @@ block content
       if (user.isAdmin)
         .jumbotron(style={background: '#6BB9F0'})
           h1 Admin Home: #{user.firstname}
-          button.btn.btn-primary#unseentickets Unseen Tickets
-          button.btn.btn-primary#seenTickets Seen Tickets
-          button.btn.btn-primary#closedTickets Closed Tickets
           
       .panel.panel-success
         .panel-heading

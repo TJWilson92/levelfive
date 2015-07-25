@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var Comment = new Schema({
 	ticket: {type: mongoose.Schema.Types.ObjectId, ref: 'Ticket'},
-  account: mongoose.Schema.Types.ObjectId,
+  account: {type: mongoose.Schema.Types.ObjectId, ref: 'Account'},
   date: {type: Date, default: Date.now},
   text: String
 });

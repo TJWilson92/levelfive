@@ -13,12 +13,15 @@ router.get('/show/:id', function(req, res, next){
 		Ticket.findOne({_id: ObjectId(req.params.id)}).populate('comments').exec(function(err, ticket){
 			Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
 				if (req.user.isAdmin || student._id == req.user._id) {
-					res.render('ticket/show', {
-						ticket: ticket,
-						user: req.user,
-						student: student,
-						comments: ticket.comments
-					});
+					Comment.find({ticket: ObjectId(ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
+						res.render('ticket/show', {
+							ticket_object: JSON.stringify(ticket),
+							ticket: ticket,
+							user: req.user,
+							student: student,
+							comments: comments
+						});
+					})
 				} else {
 					res.render('index');
 				}
@@ -105,8 +108,6 @@ router.post('/new', function(req, res){
 		message : t_message,
 		location : t_location
 	});
-
-	// console.log(newTicket);
 
 	newTicket.save(function (err){
 		if (err) return handleError(err);
