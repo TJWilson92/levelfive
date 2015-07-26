@@ -15,7 +15,6 @@ router.get('/show/:id', function(req, res, next){
 				if (req.user.isAdmin || student._id == req.user._id) {
 					Comment.find({ticket: ObjectId(ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
 						res.render('ticket/show', {
-							ticket_object: JSON.stringify(ticket),
 							ticket: ticket,
 							user: req.user,
 							student: student,

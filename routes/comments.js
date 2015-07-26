@@ -27,8 +27,8 @@ router.post('/new', function(req, res, next){
 });
 
 router.get('/get_comments', function(req, res, next){
-  console.log(req);
-  Comment.find({ticket: ObjectId(req.ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
+  var ticket_id = req.query.ticket_id;
+  Comment.find({ticket: ObjectId(ticket_id)}).populate({path: 'account'}).exec(function(err, comments){
     res.send(comments);
   })
 })

@@ -1,14 +1,7 @@
 extends ../layout
     
 block content
-  script(type='text/javascript').
-    $.ajax({
-      url: '../../comments/get_comments',
-      method: 'GET',
-      data: {ticket: JSON.stringify(#{ticket})},
-      dataType: 'json'
-    });
-
+  script(src='../../javascripts/show_ticket.js')
   .container 
     .jumbotron
       h1 Showing Ticket
@@ -46,12 +39,8 @@ block content
               td #{ticket.status}
     
     h2 Comments
-    each c in comments
-      .panel.panel-default
-        .panel-heading
-          h5 Comment from: #{c.account.firstname}
-        .panel-body 
-          p #{c.text}
+    
+    div#ticket_comments
     
     form(role='form', action="/../../comments/new", method="post", style='max-width: 300px;')
       .form-group

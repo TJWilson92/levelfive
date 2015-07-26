@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     nodemon: {
       dev: {
         script: './bin/www',
-        ignore: ['node_modules/**', 'views/**', 'public/**']
+        ignore: ['node_modules/**', 'views/**', 'public/**', 'public/javascripts/**']
       }
     }
   });
