@@ -8,45 +8,39 @@ block content
     
 
   .container
-    if (!user)
-     .jumbotron
-        h1 Please login please
-
-    if (user)
-
       //- Set heading in Jumbotron
-      if (!user.isAdmin)
+      if(!user.isAdmin)
         .jumbotron
           h1 Welcome, #{user.firstname}
-      if (user.isAdmin)
-        .jumbotron(style={background: '#6BB9F0'})
-          h1 Admin Home: #{user.firstname}
           
-      .panel.panel-success
-        .panel-heading
-          h2 New Ticket 
-        .panel-body
-          form#tktForm
-            .form-group
-              input.form-control#tktQuestion(type='text', placeholder='What problem/question are you on?' minlength='1' required)
-            .form-group
-              textarea.form-control#tktText(type='text', placeholder='What do you need help with?' required)
-            .form-group(align='right')
-              button.btn.btn-primary#tktSubmit Submit
-
-      //- Stuff that students will see
-
-
-      if (!user.isAdmin)
-        //- Re-fill their location if it's been a while
-        if ((Date.now() - user.lastLoggedIn) > 6000000)
+        if(needs_location)
           .panel.panel-warning#locationBox
             .panel-heading
               h2 Need your location!
             .panel-body
               p Please enter where you are so we can send a ticket to you
               input#locationBar
-              button#locationButton.btn.btn-primary Send   
+              button#locationButton.btn.btn-primary Send
+          
+        .panel.panel-success
+          .panel-heading
+            h2 New Ticket 
+          .panel-body
+            form#tktForm
+              .form-group
+                input.form-control#tktQuestion(type='text', placeholder='What problem/question are you on?' minlength='1' required)
+              .form-group
+                textarea.form-control#tktText(type='text', placeholder='What do you need help with?' required)
+              .form-group(align='right')
+                button.btn.btn-primary#tktSubmit Submit
+                
+      if(user.isAdmin)
+        .jumbotron(style={background: '#6BB9F0'})
+          h1 Admin Home: #{user.firstname}
+
+      if(!user.isAdmin)
+      
+             
               
               
         //- All tickets only if they've not been closed
@@ -81,7 +75,6 @@ block content
                   th Message
                   th Time 
                   th Mark as Seen
-                  th Change Status
               tbody
                 tbody#unseenTicketsTable
 
@@ -97,8 +90,7 @@ block content
                   th Question
                   th Message
                   th Time 
-                  th Mark as Closed
-                  th Change Status
+                  th Close Ticket
               tbody
                 tbody#seenTicketsTable
     

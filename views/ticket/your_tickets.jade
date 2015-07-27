@@ -11,7 +11,8 @@ block content
     for ticket in openTickets 
       .panel.panel-primary
         .panel-heading
-          h2 Ticket Id: #{ticket.ticketId}
+          h2
+            a(href='show/' + ticket.ticketId, style='color: white;') Ticket Id: #{ticket.ticketId}
         .panel-body
           table.table 
             thead
@@ -41,17 +42,4 @@ block content
               tr
                 td Status Notes
                 td #{ticket.ticketStatus}
-
-    h2 Closed Tickets  
-        
-    table.table 
-      thead 
-        tr 
-          th Student
-          th Question
-      tbody 
-        for ticket in closedTickets
-          tr
-            td #{ticket.firstname} #{ticket.surname} (#{ticket.email})
-            td #{ticket.currentQuestion}
       

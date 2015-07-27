@@ -48,7 +48,6 @@ router.get('/your_tickets', function(req, res, next) {
 									question: val.currentQuestion,
 									studentLocation: val.location,
 									studentMessage: val.message,
-									ticketStatus: val.ticketStatus,
 									seen: val.seen,
 									open: val.open
 								};
@@ -116,9 +115,8 @@ router.post('/new', function(req, res){
 });
 
 router.post('/studentCloseTicket', function(req, res, next){
-	Ticket.findOne({'_id' : req.body.ticketId}, function(err, ticket){
+	Ticket.findById(req.body.ticketId, function(err, ticket){
 		ticket.remove();
-		res.send('Ticket deleted')
 	});
 })
 
@@ -139,12 +137,5 @@ router.post('/markAsClosed', function(req, res, next){
 	});
 })
 
-router.post('/updateTicketStatus', function(req, res, next){
-	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
-		ticket.ticketStatus = req.body.statusUpdate
-		ticket.save();
-		res.send('Ticket Edited');
-	});
-});
 
 module.exports = router;

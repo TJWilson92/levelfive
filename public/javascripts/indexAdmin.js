@@ -90,9 +90,6 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push(curr[3]);
 				indTicket.push(newCol);
 				indTicket.push('<button onclick="markAsSeen(\'' + curr[4] + '\')" class="btn btn-primary">Seen</button>');
-				indTicket.push(newCol);
-				// promptForStatus() is defined in index.jade as needs to be accessible.
-				indTicket.push('<button onclick="promptForStatus(\'' + curr[4] + '\')" class="btn btn-primary">Update</button>');
 				indTicket.push('</td></tr>');
 				totalHtml.push(indTicket.join(''));
 
@@ -114,9 +111,6 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push(curr[3]);
 				indTicket.push(newCol);
 				indTicket.push('<button onclick="markAsClosed(\'' + curr[4] + '\')" class="btn btn-primary">Close</button>')
-				indTicket.push(newCol);
-				// promptForStatus() is defined in index.jade as needs to be accessible.
-				indTicket.push('<button onclick="promptForStatus(\'' + curr[4] + '\')" class="btn btn-primary">Update</button>')
 				indTicket.push('</td></tr>');
 				totalHtml.push(indTicket.join(''));
 

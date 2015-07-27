@@ -12,6 +12,7 @@ router.get('/', function (req, res) {
         res.redirect('login');
     } else {
         res.render('index', {
+            needs_location: req.needs_location,
             user : req.user,
             title : "Levelfour" });
     }
@@ -59,7 +60,9 @@ router.post('/register', function(req, res) {
         }
 
         passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
+            res.redirect('/', {
+              needs_location: true
+            });
         });
     });
 });
@@ -71,14 +74,9 @@ router.get('/login', function(req, res) {
 router.post('/login',
     passport.authenticate('local'),
     function(req, res) {
-        console.log(Date.now() - req.user.lastLoggedIn);
-        req.user.lastLoggedIn = Date.now();
         req.user.save(function(err){
             if (err) throw (err);
-            res.redirect('/', 200, {
-                // 8 hours in milliseconds = 28800000
-                needsNewLocation: ((Date.now() - req.user.lastLoggedIn) >= 1000)
-            });
+            res.redirect('/', 200, {});
         });
 });
 
@@ -180,12 +178,7 @@ router.post('/createTicket', function(req, res, next){
 });
 
 router.get('/getTickets', function(req, res, next){
-    Ticket.find( {
-        $and : [
-         { student: req.user.id },
-         { ticketStatus: {'$ne' : "Closed (by student)"} }
-         ]
-     }, function(err, tckts){
+    Ticket.find({student: req.user.id}, function(err, tckts){
         res.send(tckts);
     });
 });
