@@ -31,6 +31,7 @@
     "passport-local": "*",
     "passport-local-mongoose": "*",
     "should": "*",
-    "express-validator": "*"
+    "express-validator": "*",
+    "pluralize": "*"
   }
 }

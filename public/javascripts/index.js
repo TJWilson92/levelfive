@@ -1,61 +1,64 @@
+
+// This is set in index.jade file, as comes through right away.
+user = local_data
+
+// Sort out the updating of tickets
+var getTickets = function(callback){
+	$.ajax({
+		url: '/getTickets',
+		method: 'GET',
+	}).done(function(results){
+		callback(results);
+	});
+};
+
+var closeTicketAjax = function(ticket_id, callback){
+	$.ajax({
+		url: 'tickets/studentCloseTicket',
+		data: {ticketId: ticket_id},
+		method: 'POST'
+	}). done(function(results){
+		location.reload();
+	})
+}
+
+var ticketFunction = function(){
+	getTickets(function(results){
+		addTicketToPanel(results)
+	});
+};
+
+var addTicketToPanel = function(tickets){
+	totalHtml = [];
+	tickets.forEach(function(curr, ind, arr){
+		indTicket = [];
+		indTicket.push('<tr><td>');
+		indTicket.push(curr.currentQuestion);
+		indTicket.push('</td><td>');
+		indTicket.push('<a href="/tickets/show/' + curr._id + '">' + curr.message + '</a>');
+		indTicket.push('</td><td>');
+		var seen = curr.seen;
+		if (seen){
+			indTicket.push('Seen');
+		}else {
+			indTicket.push('Not Seen');
+		}
+		indTicket.push('</td><td>');
+		indTicket.push('<button onclick=\"closeTicketAjax(\'' + curr._id + '\')\">Close Ticket</button>');
+		indTicket.push('</td></tr>');
+		totalHtml.push(indTicket.join(''));
+	});
+	$('#ticketTable').replaceWith(totalHtml.join(''));
+}
+
+
+
+// Update the ticket table every 60 seconds.
+setTimeout(ticketFunction(),60000);
+
+
+// Updates student's location via ajax, then hides the container.
 $(document).ready(function(){
-	// This is set in index.jade file, as comes through right away.
-	user = local_data
-
-	// Sort out the updating of tickets
-	var getTickets = function(callback){
-		$.ajax({
-			url: '/getTickets',
-			method: 'GET',
-		}).done(function(results){
-			callback(results);
-		});
-	};
-
-	var closeTicketAjax = function(ticket_id, callback){
-		$.ajax({
-			url: 'tickets/studentCloseTicket',
-			data: {ticketId: ticket_id},
-			method: 'POST'
-		}). done(function(results){
-			callback(results);
-		})
-	}
-
-	var addTicketToPanel = function(tickets){
-		totalHtml = [];
-		tickets.forEach(function(curr, ind, arr){
-			indTicket = [];
-			indTicket.push('<tr><td>');
-			indTicket.push(curr.currentQuestion);
-			indTicket.push('</td><td>');
-			indTicket.push(curr.message);
-			indTicket.push('</td><td>');
-			var seen = curr.seen;
-			if (seen){
-				indTicket.push('Seen');
-			}else {
-				indTicket.push('Not Seen');
-			}
-			indTicket.push('</td><td>');
-			indTicket.push('<button onclick=\"closeTicketAjax(\'' + curr._id + '\', ticketFunction())\">Close Ticket</button>');
-			indTicket.push('</td></tr>');
-			totalHtml.push(indTicket.join(''));
-		});
-		$('#ticketTable').replaceWith(totalHtml.join(''));
-	}
-
-	var ticketFunction = function(){
-		getTickets(function(results){
-			addTicketToPanel(results)
-		});
-	};
-
-	// Update the ticket table every 60 seconds.
-	setTimeout(ticketFunction(),60000);
-
-
-	// Updates student's location via ajax, then hides the container.
 	$('#locationButton').click(function(){
 		var val = document.getElementById('locationBar').value
 		if (val.length > 0) {
@@ -91,4 +94,4 @@ $(document).ready(function(){
 		}
 	});
 
-});
+})

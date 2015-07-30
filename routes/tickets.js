@@ -7,71 +7,58 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var router = express.Router();
 
 router.get('/show/:id', function(req, res, next){
-	if (!req.user) {
-		res.render('login');
-	} else {
-		Ticket.findOne({_id: ObjectId(req.params.id)}).populate('comments').exec(function(err, ticket){
-			Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
-				if (req.user.isAdmin || student._id == req.user._id) {
-					Comment.find({ticket: ObjectId(ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
-						res.render('ticket/show', {
-							ticket: ticket,
-							user: req.user,
-							student: student,
-							comments: comments
-						});
-					})
-				} else {
-					res.render('index');
-				}
+	if(req.user){
+		Ticket.findById(req.params.id).populate('student').exec(function(err, ticket){
+			res.render('ticket/show', {
+				ticket: ticket,
+				user: req.user
 			});
 		});
-	}
+	} else {
+		res.render('login');
+	};
 });
+	// if (!req.user) {
+	// 	res.render('login');
+	// } else {
+	// 	Ticket.findOne({_id: ObjectId(req.params.id)}).populate('comments').exec(function(err, ticket){
+	// 		Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
+	// 			if (req.user.isAdmin || student._id == req.user._id) {
+	// 				Comment.find({ticket: ObjectId(ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
+	// 					res.render('ticket/show', {
+	// 						ticket: ticket,
+	// 						user: req.user,
+	// 						student: student,
+	// 						comments: comments
+	// 					});
+	// 				})
+	// 			} else {
+	// 				res.render('index');
+	// 			}
+	// 		});
+	// 	});
+	// }
+// });
 
 router.get('/your_tickets', function(req, res, next) {
 	if (!req.user) {
 		res.render('login');
 	}
 	else {
-		Account.findOne({_id: ObjectId(req.user._id)}, function(err, account){
+		Account.findById(req.user._id, function(err, account){
 			if (account.isAdmin || account.isDemonstrator) {
-				Ticket.find({handledBy: ObjectId(account._id)}, function(err, tickets){
-					var accObjects = [];
-					tickets.forEach(function(val, ind, array){
-						Account.findOne({_id: ObjectId(val.student)}, function(err, student){
-								var newObj = {
-									ticketId: val._id,
-									firstname: account.firstname,
-									surname: account.surname,
-									email: account.email,
-									question: val.currentQuestion,
-									studentLocation: val.location,
-									studentMessage: val.message,
-									seen: val.seen,
-									open: val.open
-								};
-								accObjects.push(newObj);
-								if (accObjects.length == tickets.length) {
-
-									var openTickets = accObjects.filter(function(item){
-										return item.open;
-									});
-
-
-									res.render('ticket/your_tickets', {
-										user: req.user,
-										title: "Your Tickets",
-										openTickets: openTickets,
-									});
-								}
-						});
-					});
-				});
+				Ticket.find({}).populate('student').exec(function(err, tickets){
+					res.render('ticket/your_tickets', {
+						tickets: tickets,
+						user: req.user
+					})
+				})
 			} else {
 				Ticket.find({student: ObjectId(account._id)}, function(err, tickets){
-					res.render('tickets/your_tickets',
-					{tickets:tickets});
+					res.render('ticket/your_tickets', {
+						tickets:tickets,
+						user: req.user
+					});
 				});
 			}
 		})
@@ -117,6 +104,7 @@ router.post('/new', function(req, res){
 router.post('/studentCloseTicket', function(req, res, next){
 	Ticket.findById(req.body.ticketId, function(err, ticket){
 		ticket.remove();
+		res.send('ticket deleted.');
 	});
 })
 

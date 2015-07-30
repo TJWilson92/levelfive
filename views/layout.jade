@@ -3,11 +3,11 @@ head
   title= title
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
+  link(rel='stylesheet', href='/stylesheets/bootstrap.css')
   link(rel='stylesheet', href='/stylesheets/style.css')
   script(src='http://code.jquery.com/jquery.js')
   script(src='http://code.jquery.com/ui/1.11.4/jquery-ui.js')
-  script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
-  script(src='javascripts/index.js')
+  
   
   if (user)
     if (user.isAdmin)
@@ -36,8 +36,6 @@ body
           else 
             li 
               a(href='/tickets/new') New Ticket
-            li 
-              a(href='tickets/your_tickets') Your Tickets
         
         ul.nav.navbar-nav.navbar-right
           if (user)

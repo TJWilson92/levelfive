@@ -24,6 +24,11 @@ router.post('/new', function(req, res, next){
   newComment.save(function(err){
     res.redirect('/');
   });
+
+  Ticket.findById(newComment.ticket, function(err, ticket){
+    ticket.comments.push(newComment._id);
+    ticket.save();
+  })
 });
 
 router.get('/get_comments', function(req, res, next){

@@ -8,7 +8,7 @@ block content
     
     .panel.panel-primary
       .panel-heading
-        h2 Ticket Id: #{ticket.id}
+        h2 Ticket Id: #{ticket._id}
       .panel-body
         table.table 
           thead
@@ -18,7 +18,7 @@ block content
           tbody
             tr
               td Student
-              td #{student.firstname} #{student.surname} (#{student.email})
+              td #{ticket.student.firstname} #{ticket.student.surname} (#{ticket.student.email})
             tr
               td Student Location
               td #{ticket.location}

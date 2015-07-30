@@ -11,10 +11,23 @@ router.get('/', function (req, res) {
     if (!req.user) {
         res.redirect('login');
     } else {
-        res.render('index', {
-            needs_location: req.needs_location,
-            user : req.user,
-            title : "Levelfour" });
+      Account.findById(req.user._id, function(err, account){
+        if ((account.lastLoggedIn - account.lastUpdated)  > 3600000 ) {
+          needsLocation = true;
+          account.lastUpdated = Date.now();
+          account.save();
+        } else {
+          needsLocation = false;
+        }
+        Ticket.find({}, function(err, tickets){
+          res.render('index', {
+              number_tickets: tickets.length,
+              needs_location: needsLocation,
+              user : req.user,
+              title : "Levelfour" });
+        });
+      });
+
     }
 });
 

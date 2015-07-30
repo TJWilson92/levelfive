@@ -6,9 +6,7 @@ block content
     .jumbotron
       h1 Your Tickets 
 
-    h2 Open Tickets
-    
-    for ticket in openTickets 
+    each ticket in tickets 
       .panel.panel-primary
         .panel-heading
           h2
@@ -22,8 +20,7 @@ block content
             tbody
               tr
                 td Student
-                td 
-                  a(href='show/' + ticket.ticketId) #{ticket.firstname} #{ticket.surname} (#{ticket.email})
+                td #{ticket.student.firstname} #{ticket.student.surname} (#{ticket.student.email})
               tr
                 td Student Location
                 td #{ticket.studentLocation}
