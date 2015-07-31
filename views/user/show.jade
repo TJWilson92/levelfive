@@ -7,16 +7,31 @@ block content
     .jumbotron 
       h1 Showing Student
       hr
-      p #{account.firstname} #{account.surname}
-      p #{account.email}
-      p #{account.}
+      p #{student.firstname} #{student.surname}
+      p #{student.email}
     
     .panel.panel-primary
       .panel-heading 
         h4 Permissions
       .panel-body
-        if(account.isDemonstrator)
+        if(student.isDemonstrator)
           p This account has been marked as a demonstrator.
-          button.btn.btn-primary() Toggle Demonstrator
-        if(account.isDemonstrator)
+        if(!student.isDemonstrator)
+          p This account is not a Demonstrator
+        button.btn.btn-primary#toggleDemonstratorButton Toggle Demonstrator
+        
+        if(student.isAdmin)
+          p This account has been marked as an admin.
+        if(!student.isAdmin)
+          p This account is not an admin.
+        button.btn.btn-danger#toggleAdminButton Toggle Admin.
+    
+    .panel.panel-primary
+      .panel-heading
+        h4 Tickets
+      .panel-body
+        if(tickets.length == 0)
+          p User has no Tickets
+        each t in tickets
+          a(href='../../tickets/show/#{t._id}') #{t.message}
       
