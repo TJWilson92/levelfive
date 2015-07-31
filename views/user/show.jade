@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  script(src='../../javascripts/show_user.js')
+    
+  .container
+    .jumbotron 
+      h1 Showing Student
+      hr
+      p #{account.firstname} #{account.surname}
+      p #{account.email}
+      p #{account.}
+    
+    .panel.panel-primary
+      .panel-heading 
+        h4 Permissions
+      .panel-body
+        if(account.isDemonstrator)
+          p This account has been marked as a demonstrator.
+          button.btn.btn-primary() Toggle Demonstrator
+        if(account.isDemonstrator)
+      

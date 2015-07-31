@@ -1,9 +1,51 @@
-var express = require('express');
-var router = express.Router();
+var express   = require('express');
+var mongoose  = require('mongoose');
+var ObjectId  = mongoose.Schema.Types.ObjectId;
+var Account   = require('../models/account');
+var Ticket    = require('../models/ticket');
+var router    = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+
+
+router.get('/show/:id', function(req, res, next){
+  Account.findById(req.params.id, function(err, account){
+    Ticket.find({student: ObjectId(account._id)}, function(err, tickets){
+      if (req.user.isAdmin) {
+        res.render('user/show', {
+          student: account,
+          tickets: tickets,
+          user: req.user
+        })
+      } else {
+        res.render('user/not_admin');
+      }
+    })
+  })
+});
+
+router.post('/toggleDemonstrator', function(req, res, next){
+  Account.findById(req.query.account_id, function(err, account){
+    if (account.isDemonstrator) {
+      account.isDemonstrator = false;
+    } else {
+      account.isDemonstrator = true;
+    }
+    account.save();
+    res.send('Changed');
+  });
+});
+
+router.post('/toggleAdmin', function(req, res, next){
+  Account.findById(req.query.account_id, function(err, account){
+    if (account.isAdmin) {
+      account.isAdmin = false;
+    } else {
+      account.isAdmin = true;
+    }
+    account.save();
+    res.send('Changed');
+  });
 });
 
 module.exports = router;

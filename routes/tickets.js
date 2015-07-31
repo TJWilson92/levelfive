@@ -18,27 +18,6 @@ router.get('/show/:id', function(req, res, next){
 		res.render('login');
 	};
 });
-	// if (!req.user) {
-	// 	res.render('login');
-	// } else {
-	// 	Ticket.findOne({_id: ObjectId(req.params.id)}).populate('comments').exec(function(err, ticket){
-	// 		Account.findOne({_id: ObjectId(ticket.student)}, function(err, student){
-	// 			if (req.user.isAdmin || student._id == req.user._id) {
-	// 				Comment.find({ticket: ObjectId(ticket._id)}).populate({path: 'account'}).exec(function(err, comments){
-	// 					res.render('ticket/show', {
-	// 						ticket: ticket,
-	// 						user: req.user,
-	// 						student: student,
-	// 						comments: comments
-	// 					});
-	// 				})
-	// 			} else {
-	// 				res.render('index');
-	// 			}
-	// 		});
-	// 	});
-	// }
-// });
 
 router.get('/your_tickets', function(req, res, next) {
 	if (!req.user) {
