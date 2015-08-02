@@ -32,6 +32,7 @@
     "passport-local-mongoose": "*",
     "should": "*",
     "express-validator": "*",
-    "pluralize": "*"
+    "pluralize": "*",
+    "nodemailer":"*"
   }
 }

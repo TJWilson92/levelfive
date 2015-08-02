@@ -18,24 +18,27 @@ body
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='#') levelfour
+        a.navbar-brand(href='/') levelfour
       .navbar-collapse.collapse
         ul.nav.navbar-nav
-          li.active
-            a(href='/') Home
           if (!user)
             li
               a(href='/login') Login
             li
               a(href='/register') Register
-          else 
+          else
+            li
+              a(href='/') Home 
             li 
               a(href='/tickets/new') New Ticket
+              
         
         ul.nav.navbar-nav.navbar-right
           if (user)
-          li
-            a(href='/myaccount') Your account
+            li
+              a(href='/users/show/' + user._id) Your account
+            li 
+              a(href='/logout') Logout
       
             
   block content

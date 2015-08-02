@@ -11,7 +11,11 @@ var router    = express.Router();
 router.get('/show/:id', function(req, res, next){
   Account.findById(req.params.id, function(err, account){
     Ticket.find({student: ObjectId(account._id)}, function(err, tickets){
-      if (req.user.isAdmin) {
+      if (req.user._id == req.params.id) {
+         res.render('myaccount', {
+           user: req.user
+         });
+      } else if (req.user.isAdmin) {
         res.render('user/show', {
           student: account,
           tickets: tickets,

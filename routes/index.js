@@ -5,6 +5,14 @@ var Ticket = require('../models/ticket')
 var ObjectId = require('mongoose').Types.ObjectId;
 var plm = require('passport-local-mongoose');
 var router = express.Router();
+var nodemailer = require('nodemailer');
+
+var gmail_auth = require('../createMailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: gmail_auth
+});
 
 // This is a change of file
 router.get('/', function (req, res) {
@@ -91,6 +99,35 @@ router.post('/login',
             if (err) throw (err);
             res.redirect('/', 200, {});
         });
+});
+
+router.get('/forgot-password', function(req, res, next){
+  res.render('forgot-password');
+})
+
+router.post('/forgot-password', function(req, res, next){
+  console.log(req);
+  var user_email = req.body.email;
+  var new_password = Math.random().toString(24).slice(2);
+  Account.findOne({email: user_email}, function(err, account){
+    account.setPassword(new_password, function(err){
+      if(err) throw(err);
+      account.save();
+      var mailOptions = {
+        from: 'Chemistry Robot',
+        to: account.email,
+        subject: 'New Password for you!',
+        text: 'Boop, beep, boop. \nYou forgot your password, you silly goose. So here is a new one: ' + new_password + ' . It has been especially made for you, but it is entirely random, so you might want to change to to something more memorable, by going to the  "My Account" page once you have logged in.\nBoop, beep, the Chemistry robot. '
+      }
+      transporter.sendMail(mailOptions, function(err, info){
+        if (err){
+          console.log(err);
+        }
+        console.log(info.response);
+        res.render('login');
+      });
+    });
+  });
 });
 
 router.get('/logout', function(req, res) {

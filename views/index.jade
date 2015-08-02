@@ -12,7 +12,7 @@ block content
 
   .container
       //- Set heading in Jumbotron
-      if(!user.isAdmin)
+      if(!user.isAdmin & !user.isDemonstrator)
         .jumbotron
           h1 Welcome, #{user.firstname}
           hr
@@ -41,11 +41,11 @@ block content
                 button.btn.btn-primary#tktSubmit Submit
                 
       
-      if(user.isAdmin)
+      if(user.isAdmin | user.isDemonstrator)
         .jumbotron(style={background: '#6BB9F0'})
           h1 Admin Home: #{user.firstname}
 
-      if(!user.isAdmin)        
+      if(!user.isAdmin | !user.isDemonstrator)        
         .panel.panel-default
           .panel-heading
             h2 Your Tickets     
@@ -62,7 +62,7 @@ block content
         
 
       //- Set Admin Facilities
-      if (user.isAdmin)
+      if (user.isAdmin | user.isDemonstrator)
         
         //- See all unseen tickets
         .panel.panel-primary
