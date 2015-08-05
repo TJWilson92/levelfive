@@ -56,8 +56,14 @@ block content
                   th Question
                   th Message
                   th Seen?
-                  th Close Ticket
-              tbody#ticketTable
+              tbody
+                each ticket in student_tickets
+                  tr
+                    td 
+                      a(href='tickets/show/' + ticket._id) #{ticket.currentQuestion}
+                    td #{ticket.message}
+                    td #{ticket.seen}
+                    td #{t}
                 
         
 

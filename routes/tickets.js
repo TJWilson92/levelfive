@@ -33,9 +33,9 @@ router.get('/your_tickets', function(req, res, next) {
 					})
 				})
 			} else {
-				Ticket.find({student: ObjectId(account._id)}, function(err, tickets){
+				Ticket.find({student: ObjectId(account._id)}).populate({path: 'student'}).exec(function(err, tickets){
 					res.render('ticket/your_tickets', {
-						tickets:tickets,
+						tickets: tickets,
 						user: req.user
 					});
 				});

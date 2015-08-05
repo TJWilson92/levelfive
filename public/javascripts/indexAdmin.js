@@ -7,6 +7,7 @@ markAsSeen = function(ticketId){
 	});
   seenTkts();
   unseenTkts();
+  document.location.reload();
 }
 
 markAsClosed = function(ticketId){
@@ -18,6 +19,7 @@ markAsClosed = function(ticketId){
   });
   closedTkts();
   seenTkts();
+  document.location.reload();
 }
 
 var promptForStatus = function(ticketId){
