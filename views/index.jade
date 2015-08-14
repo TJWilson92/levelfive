@@ -43,9 +43,12 @@ block content
                 button.btn.btn-primary#tktSubmit Submit
                 
       
-      if(user.isAdmin | user.isDemonstrator)
-        .jumbotron(style={background: '#6BB9F0'})
+      if(user.isAdmin) 
+        .jumbotron
           h1 Admin Home: #{user.firstname}
+      else if (user.isDemonstrator)
+        .jumbotron(style="background: '#6BB9F0'")
+          h1 Demonstrator Home
       else 
         .panel.panel-default
           .panel-heading
@@ -62,8 +65,12 @@ block content
                   tr
                     td 
                       a(href='tickets/show/' + ticket._id) #{ticket.currentQuestion}
-                    td #{ticket.message}
-                    td #{ticket.seen}
+                    td
+                      a(href='tickets/show/' + ticket._id) #{ticket.message}
+                    if (ticket.seen)
+                      td Yes
+                    else
+                      td No
                     td #{t}
                 
         

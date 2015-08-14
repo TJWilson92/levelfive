@@ -1,21 +1,14 @@
-markAsSeen = function(ticketId){
+markAsSeen = function(ticketId) {
   $.ajax({
 	    url: '/tickets/markAsSeen',
 	    method: 'post',
 	    data: {ticket_id: ticketId},
 	    dataType: 'json'
-<<<<<<< HEAD
-	}).done(function() {
-    document.window.reload();
+	}).complete(function() {
+    seenTkts();
+    unseenTkts();
   });
 };
-=======
-	});
-  seenTkts();
-  unseenTkts();
-  document.location.reload();
-}
->>>>>>> origin/master
 
 var markAsClosed = function(ticketId){
   $.ajax({
@@ -24,8 +17,8 @@ var markAsClosed = function(ticketId){
     data: {ticket_id: ticketId},
     dataType: 'json'
   });
-  closedTkts();
   seenTkts();
+  unseenTkts();
   document.location.reload();
 }
 
@@ -62,6 +55,15 @@ var adminGetTickets = function (ticket_url, callback) {
 	});
 };
 
+var truncateMessage = function(str) {
+  if (str.length > 200) {
+    return (str.substring(0, 200) + "...");
+  } else {
+    return (str);
+  }
+}
+
+
 // Tickets is the returned JSON data from ajax
 // Table is the name of the html element where the table rows need to go
 // Type is the kind of tickets they are, possibilities: "Open", "Unseen", "Closed"
@@ -95,7 +97,7 @@ var addTicketToPanel = function(tickets, table, type){
         indTicket.push('</a>');
 				indTicket.push(newCol);
         indTicket.push('<a href="tickets/show/' + curr[4] + '">')
-				indTicket.push(curr[2]);
+				indTicket.push(truncateMessage(curr[2]));
         indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[3]);
@@ -118,7 +120,7 @@ var addTicketToPanel = function(tickets, table, type){
         indTicket.push('</a>');
 				indTicket.push(newCol);
         indTicket.push('<a href="tickets/show/' + curr[4] + '">')
-				indTicket.push(curr[2]);
+				indTicket.push(truncateMessage(curr[2]));
         indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[3]);

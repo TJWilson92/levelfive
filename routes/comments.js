@@ -21,8 +21,16 @@ router.post('/new', function(req, res, next){
     text: text
   });
 
-  newComment.save(function(err){
-    res.redirect('/tickets/show/' + ticket_id);
+  newComment.save(function(err, comment){
+    Ticket.findById(ticket_id, function(err, ticket){
+      if (!ticket.seen) {
+        ticket.seen = true;
+        ticket.save();
+        res.redirect('/tickets/show/' + ticket_id);
+      } else {
+        res.redirect('/tickets/show/' + ticket_id);
+      }
+    })
   });
 
   Ticket.findById(newComment.ticket, function(err, ticket){
