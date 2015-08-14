@@ -7,6 +7,8 @@ var getTickets = function(callback){
 	$.ajax({
 		url: '/getTickets',
 		method: 'GET',
+		dataType: 'json',
+		data: {user}
 	}).done(function(results){
 		callback(results);
 	});
@@ -59,6 +61,7 @@ setTimeout(ticketFunction(),60000);
 
 // Updates student's location via ajax, then hides the container.
 $(document).ready(function(){
+	ticketFunction();
 	$('#locationButton').click(function(){
 		var val = document.getElementById('locationBar').value
 		if (val.length > 0) {
@@ -83,11 +86,16 @@ $(document).ready(function(){
 				url: 'createTicket',
 				method: 'POST',
 				data: {tktQuestion: tktQuestion, tktText: tktText},
+<<<<<<< HEAD
 			}).done(function(results){
 				// Clear the box
 				$('#tktQuestion').val = ""
 				$('#tktText').val = ""
 				window.location.replace(window.location.toString() + 'tickets/show/' + results._id)
+=======
+			}).done(function(){
+				window.reload();
+>>>>>>> origin/master
 			});
 		} else {
 			alert('Oop, we need your current quesiton, and a message for help!');

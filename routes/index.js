@@ -20,19 +20,22 @@ router.get('/', function (req, res) {
         res.redirect('login');
     } else {
       Account.findById(req.user._id, function(err, account){
-        if ((account.lastLoggedIn - account.lastUpdated)  > 3600000 ) {
+        if ((Date.now() - account.lastLoggedIn)  > 3600000) {
           needsLocation = true;
-          account.lastUpdated = Date.now();
+          account.lastLoggedIn = Date.now();
           account.save();
         } else {
           needsLocation = false;
         }
         Ticket.find({}, function(err, tickets){
-          res.render('index', {
-              number_tickets: tickets.length,
-              needs_location: needsLocation,
-              user : req.user,
-              title : "Levelfour" });
+          Ticket.find({student: req.user._id}, function(err, student_tickets){
+            res.render('index', {
+                number_tickets: tickets.length,
+                student_tickets: student_tickets,
+                needs_location: needsLocation,
+                user : req.user,
+                title : "Levelfour" });
+          })
         });
       });
 
@@ -81,9 +84,7 @@ router.post('/register', function(req, res) {
         }
 
         passport.authenticate('local')(req, res, function () {
-            res.redirect('/', {
-              needs_location: true
-            });
+            res.redirect('/', 200);
         });
     });
 });
@@ -97,7 +98,9 @@ router.post('/login',
     function(req, res) {
         req.user.save(function(err){
             if (err) throw (err);
-            res.redirect('/', 200, {});
+            res.redirect('/', 200, {
+              needs_location: true
+            });
         });
 });
 

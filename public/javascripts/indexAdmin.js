@@ -4,10 +4,18 @@ markAsSeen = function(ticketId){
 	    method: 'post',
 	    data: {ticket_id: ticketId},
 	    dataType: 'json'
+<<<<<<< HEAD
 	}).done(function() {
     document.window.reload();
   });
 };
+=======
+	});
+  seenTkts();
+  unseenTkts();
+  document.location.reload();
+}
+>>>>>>> origin/master
 
 var markAsClosed = function(ticketId){
   $.ajax({
@@ -18,6 +26,7 @@ var markAsClosed = function(ticketId){
   });
   closedTkts();
   seenTkts();
+  document.location.reload();
 }
 
 var promptForStatus = function(ticketId){
