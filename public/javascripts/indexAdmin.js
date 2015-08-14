@@ -4,12 +4,12 @@ markAsSeen = function(ticketId){
 	    method: 'post',
 	    data: {ticket_id: ticketId},
 	    dataType: 'json'
-	});
-  seenTkts();
-  unseenTkts();
-}
+	}).done(function() {
+    document.window.reload();
+  });
+};
 
-markAsClosed = function(ticketId){
+var markAsClosed = function(ticketId){
   $.ajax({
     url: '/tickets/markAsClosed',
     method: 'post',
@@ -85,7 +85,9 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push(curr[1]);
         indTicket.push('</a>');
 				indTicket.push(newCol);
+        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
 				indTicket.push(curr[2]);
+        indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[3]);
 				indTicket.push(newCol);
@@ -106,7 +108,9 @@ var addTicketToPanel = function(tickets, table, type){
 				indTicket.push(curr[1]);
         indTicket.push('</a>');
 				indTicket.push(newCol);
+        indTicket.push('<a href="tickets/show/' + curr[4] + '">')
 				indTicket.push(curr[2]);
+        indTicket.push('</a>');
 				indTicket.push(newCol);
 				indTicket.push(curr[3]);
 				indTicket.push(newCol);
@@ -120,26 +124,16 @@ var addTicketToPanel = function(tickets, table, type){
 	}
 };
 
-
-var adminWriteToTable = function(results, table){
-
-}
-
-// Get all those tickets which are open and unseen
-var unseenTkts = function(callbacks){
-	// Submit AJAX get request for getTicketsUnseen
-	// This returns an array of tickets, configured to work with the tabe
-	// Row order: Student, Question, Message, Time, /mark as seen/, /change status/
+var unseenTkts = function(callback){
 	adminGetTickets('Unseen', function(results){
-    if (results.length != 0) {
-      addTicketToPanel(results, 'unseenTicketsTable', 'Unseen');
-    }
+    document.getElementById('unseenTicketsTable').innerHTML = "";
+    addTicketToPanel(results, 'unseenTicketsTable', 'Unseen');
 	});
 }
 
 var seenTkts = function(callbacks){
 	adminGetTickets('Seen', function(results){
-		document.getElementById('seenTicketsTable').innerHTML = "Loading";
+		document.getElementById('seenTicketsTable').innerHTML = "";
 		addTicketToPanel(results, 'seenTicketsTable', "Seen");
 	});
 }
@@ -152,20 +146,12 @@ var ticketFunction = function(){
 };
 
 $(document).ready(function(){
-	$('#unseentickets').click(function(){
-		unseenTkts();
-	});
-
-	$('#seenTickets').click(function(){
-		seenTkts();
-	});
-
   unseenTkts();
   seenTkts();
 
 	window.setInterval(function(){
 		unseenTkts();
 		seenTkts();
-	}, 10000);
+	}, 1000);
 
 })

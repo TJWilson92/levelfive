@@ -75,7 +75,7 @@ router.post('/new', function(req, res){
 
 	newTicket.save(function (err){
 		if (err) return handleError(err);
-		res.redirect('/');
+		res.redirect('/tickets/show/' + newTicket._id);
 	});
 	};
 });
@@ -91,16 +91,17 @@ router.post('/markAsSeen', function(req, res, next){
 	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
 		ticket.seen = true;
 		ticket.handledBy = req.user._id;
-		ticket.save();
-		res.send('complete')
+		ticket.save(function(err, ticket){
+				res.send('complete')
+		});
 	});
 })
 
 router.post('/markAsClosed', function(req, res, next){
 	Ticket.findOne({'_id': req.body.ticket_id}, function(err, ticket){
-		ticket.open = false;
-		ticket.save();
-		res.send('complete')
+		ticket.remove(function(err, ticket){
+			res.send('Complete');
+		});
 	});
 })
 

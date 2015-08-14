@@ -22,7 +22,7 @@ router.post('/new', function(req, res, next){
   });
 
   newComment.save(function(err){
-    res.redirect('/');
+    res.redirect('/tickets/show/' + ticket_id);
   });
 
   Ticket.findById(newComment.ticket, function(err, ticket){

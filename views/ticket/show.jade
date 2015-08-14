@@ -3,8 +3,15 @@ extends ../layout
 block content
   script(src='../../javascripts/show_ticket.js')
   .container 
-    .jumbotron
-      h1 Showing Ticket
+    .jumbotron(style="text-align: center;")
+      div
+        h1 Showing Ticket
+        button.btn.btn-danger#deleteTicketButton Delete
+      
+      div#confirm-delete
+        h3 Are you sure you want to delete this ticket?
+        button.btn.btn-danger#realTicketDelete Yes 
+        button.btn.btn-primary#DoNotDelete No
     
     .panel.panel-primary
       .panel-heading

@@ -223,8 +223,10 @@ router.post('/createTicket', function(req, res, next){
         message: tktText,
         location: req.user.location
     });
-    newTicket.save();
-    res.end('Success');
+    newTicket.save(function(err, ticket){
+      res.send(ticket);
+    });
+
 });
 
 router.get('/getTickets', function(req, res, next){

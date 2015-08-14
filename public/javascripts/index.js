@@ -83,11 +83,11 @@ $(document).ready(function(){
 				url: 'createTicket',
 				method: 'POST',
 				data: {tktQuestion: tktQuestion, tktText: tktText},
-			}).done(function(){
+			}).done(function(results){
 				// Clear the box
 				$('#tktQuestion').val = ""
 				$('#tktText').val = ""
-
+				window.location.replace(window.location.toString() + 'tickets/show/' + results._id)
 			});
 		} else {
 			alert('Oop, we need your current quesiton, and a message for help!');

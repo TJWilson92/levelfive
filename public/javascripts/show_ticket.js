@@ -8,7 +8,7 @@ var getComments = function(callback){
     data: {ticket_id: ticket_id},
   }).done(function(results){
     callback(results);
-  })
+  });
 }
 // changes
 var print_comments = function(json_data){
@@ -36,4 +36,33 @@ window.setInterval(function(){
   getComments(function(results){
     print_comments(results);
   })
-}, 50000);
+}, 10000);
+
+$(document).ready(function(){
+  // Hide the delete and confirm section
+  $('#confirm-delete').hide();
+
+  // Confirm weather to delete it or not
+  $('#deleteTicketButton').click(function(){
+    $('#confirm-delete').fadeIn("slow", function(){});
+  });
+
+  // Rehide
+  $('#DoNotDelete').click(function(){
+    $('#confirm-delete').fadeOut('slow', function(){});
+  });
+
+  // Delete the ticket
+  var ticket_id = window.location.toString().split('/')[5];
+  var home_url = window.location.toString().split('tickets')[0];
+  $('#realTicketDelete').click(function() {
+    $.ajax({
+        url: '../../tickets/markAsClosed',
+        dataType: 'json',
+        data: {ticket_id: ticket_id},
+        method: 'POST'
+    }).complete(function(){
+      window.location.replace(home_url);
+    })
+  })
+})

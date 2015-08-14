@@ -5,8 +5,10 @@ block content
     var local_data =!{JSON.stringify(user)}
     console.log(local_data)
   
-  script(src='javascripts/index.js')
-  script(src='javascripts/indexAdmin.js')
+  if (!user.isAdmin & !user.isDemonstrator)
+    script(src='javascripts/index.js')
+  else
+    script(src='javascripts/indexAdmin.js')
 
     
 
@@ -34,7 +36,7 @@ block content
           .panel-body
             form#tktForm
               .form-group
-                input.form-control#tktQuestion(type='text', placeholder='What problem/question are you on?' minlength='1' required)
+                input.form-control#tktQuestion(type='text', placeholder='What problem or practical are you on?' minlength='1' required)
               .form-group
                 textarea.form-control#tktText(type='text', placeholder='What do you need help with?' required)
               .form-group(align='right')
@@ -44,8 +46,7 @@ block content
       if(user.isAdmin | user.isDemonstrator)
         .jumbotron(style={background: '#6BB9F0'})
           h1 Admin Home: #{user.firstname}
-
-      if(!user.isAdmin | !user.isDemonstrator)        
+      else 
         .panel.panel-default
           .panel-heading
             h2 Your Tickets     
